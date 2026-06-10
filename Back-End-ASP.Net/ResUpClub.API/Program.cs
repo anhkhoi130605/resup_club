@@ -13,7 +13,10 @@ namespace ResUpClub.API
 			// Add services to the container.
 
           builder.Services.AddDbContext<AppDbContext>(options =>
-				options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+                options.UseMySql(
+					connectionString,
+					ServerVersion.AutoDetect(connectionString),
+					mysqlOptions => mysqlOptions.MigrationsAssembly("ResUpClub.Infrastructure")));
 			builder.Services.AddControllers();
 			// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 			builder.Services.AddOpenApi();
