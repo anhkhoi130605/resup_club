@@ -1,21 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Text;
 using Microsoft.EntityFrameworkCore.Storage;
 using ResUpClub.Domain.Entities;
 
 namespace ResUpClub.Infrastructure.Repository.Abstractions
 {
-	public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
 	{
 		Task<int> SaveChangesAsync();
 		Task<IDbContextTransaction> BeginTransactionAsync();
 		Task<IDbContextTransaction> BeginTransactionAsync(IsolationLevel isolationLevel);
-		//User
-		IUserRepository User{ get; }
-		IGenericRepository<Profile> Profile{ get; }
-		//Event
-		//Plan
+        IUserRepository User { get; }
+		IGenericRepository<Profile> Profile { get; }
+		IGenericRepository<Role> Roles { get; }
+		IGenericRepository<Notification> Notifications { get; }
+		IGenericRepository<Department> Departments { get; }
+		IGenericRepository<EventWaitlist> EventWaitlists { get; }
+		IGenericRepository<Feedback> Feedbacks { get; }
+		IGenericRepository<StudentQuizScore> StudentQuizScores { get; }
+		IGenericRepository<TeamMember> TeamMembers { get; }
+		IGenericRepository<EventAgenda> EventAgendas { get; }
+		IGenericRepository<Ticket> Tickets { get; }
 	}
 }
+

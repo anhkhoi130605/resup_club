@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ResUpClub.Infrastructure.Data;
+using ResUpClub.Infrastructure.Persistence;
 namespace ResUpClub.API
 {
 	public class Program
