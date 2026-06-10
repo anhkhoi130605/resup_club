@@ -183,3 +183,6 @@ PublishScripts/
 # Tệp Strong Name Key (rủi ro bảo mật)
 # *.snk
 Properties/
+WorkFlow.txt
+DiagramResup.drawio
+.$DiagramResup.drawio.bkp

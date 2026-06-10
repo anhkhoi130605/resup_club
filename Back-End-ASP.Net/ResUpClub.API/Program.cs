@@ -1,4 +1,5 @@
-
+using Microsoft.EntityFrameworkCore;
+using ResUpClub.Infrastructure.Data;
 namespace ResUpClub.API
 {
 	public class Program
@@ -6,9 +7,13 @@ namespace ResUpClub.API
 		public static void Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
+			var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+				?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 			// Add services to the container.
 
+          builder.Services.AddDbContext<AppDbContext>(options =>
+				options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 			builder.Services.AddControllers();
 			// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 			builder.Services.AddOpenApi();
