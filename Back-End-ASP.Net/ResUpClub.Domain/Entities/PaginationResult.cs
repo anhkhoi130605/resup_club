@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ResUpClub.Infrastructure.UnitOfWork
+namespace ResUpClub.Domain.Entities
 {
-	public interface IUnitOfWork
+	internal class PaginationResult
 	{
 	}
 }
