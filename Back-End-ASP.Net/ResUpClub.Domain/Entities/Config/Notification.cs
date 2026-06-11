@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-namespace ResUpClub.Domain.Entities
+using ResUpClub.Domain.Entities.AboutUser;
+namespace ResUpClub.Domain.Entities.Config
 {
 	public class Notification : BaseEntity
 	{

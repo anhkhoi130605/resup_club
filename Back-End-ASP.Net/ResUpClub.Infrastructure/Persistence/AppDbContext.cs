@@ -4,7 +4,12 @@ using System.IO;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using ResUpClub.Domain.Entities;
+using ResUpClub.Domain.Entities.Config;
+using ResUpClub.Domain.Entities.EventIformation;
+using ResUpClub.Domain.Entities.FeedBack;
+using ResUpClub.Domain.Entities.Information;
+using ResUpClub.Domain.Entities.RoomIformation;
+using ResUpClub.Domain.Entities.AboutUser;
 
 namespace ResUpClub.Infrastructure.Persistence;
 

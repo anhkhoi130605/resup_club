@@ -21,5 +21,10 @@ namespace ResUpClub.Domain.Enums
 			Club_Committee
 
 		}
+		public enum MemberInOrOutClubEnum
+		{
+			InClub,
+			OutClub
+		}
 	}
 }

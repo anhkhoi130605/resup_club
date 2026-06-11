@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ResUpClub.Domain.Entities.Config;
 using static ResUpClub.Domain.Enums.UserEnum;
 
-namespace ResUpClub.Domain.Entities
+namespace ResUpClub.Domain.Entities.AboutUser
 {
    public class Role : BaseEntity
 	{
