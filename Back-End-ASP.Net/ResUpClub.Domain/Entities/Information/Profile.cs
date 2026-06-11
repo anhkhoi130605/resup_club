@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
-namespace ResUpClub.Domain.Entities
+using ResUpClub.Domain.Entities.Config;
+using ResUpClub.Domain.Entities.EventIformation;
+using ResUpClub.Domain.Entities.FeedBack;
+using ResUpClub.Domain.Entities.RoomIformation;
+using ResUpClub.Domain.Entities.AboutUser;
+namespace ResUpClub.Domain.Entities.Information
 {
 	public class Profile : BaseEntity
 	{

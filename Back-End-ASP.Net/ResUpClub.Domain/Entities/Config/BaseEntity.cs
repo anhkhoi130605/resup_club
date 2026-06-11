@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using ResUpClub.Domain.Helper;
 
-namespace ResUpClub.Domain.Entities
+namespace ResUpClub.Domain.Entities.Config
 {
 	public abstract class BaseEntity
 	{

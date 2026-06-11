@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ResUpClub.Domain.Entities;
+using ResUpClub.Domain.Entities.Config;
 using ResUpClub.Infrastructure.Persistence;
 using ResUpClub.Infrastructure.Repository.Abstractions;
 using System;

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using ResUpClub.Domain.Entities;
+using ResUpClub.Domain.Entities.Config;
+using ResUpClub.Domain.Entities.Information;
 using ResUpClub.Domain.Enums;
 using static ResUpClub.Domain.Enums.UserEnum;
-namespace ResUpClub.Domain.Entities;
+namespace ResUpClub.Domain.Entities.AboutUser;
 
 public partial class User : BaseEntity
 {
@@ -41,4 +42,6 @@ public partial class User : BaseEntity
 	public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
 	public virtual Role Role { get; set; } = null!;
+
+	public MemberInOrOutClubEnum MemberInOrOutClub { get; set; }
 }

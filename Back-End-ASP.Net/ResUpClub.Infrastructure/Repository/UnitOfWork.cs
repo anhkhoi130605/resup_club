@@ -3,7 +3,12 @@ using System.Data;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using ResUpClub.Domain.Entities;
+using ResUpClub.Domain.Entities.Config;
+using ResUpClub.Domain.Entities.EventIformation;
+using ResUpClub.Domain.Entities.FeedBack;
+using ResUpClub.Domain.Entities.Information;
+using ResUpClub.Domain.Entities.RoomIformation;
+using ResUpClub.Domain.Entities.AboutUser;
 using ResUpClub.Infrastructure.Persistence;
 using ResUpClub.Infrastructure.Repository.Abstractions;
 

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ResUpClub.Domain.Entities.Config;
 
-namespace ResUpClub.Domain.Entities
+namespace ResUpClub.Domain.Entities.AboutUser
 {
 	public class InformationUser : BaseEntity
 	{

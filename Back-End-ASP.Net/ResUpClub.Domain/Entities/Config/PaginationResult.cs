@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ResUpClub.Domain.Entities
+namespace ResUpClub.Domain.Entities.Config
 {
 	public class PaginationResult<T>
 	{

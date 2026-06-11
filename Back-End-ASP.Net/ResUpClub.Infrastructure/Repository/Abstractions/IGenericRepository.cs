@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
-using ResUpClub.Domain.Entities;
+using ResUpClub.Domain.Entities.Config;
 
 namespace ResUpClub.Infrastructure.Repository.Abstractions
 {

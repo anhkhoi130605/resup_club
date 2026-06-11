@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResUpClub.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using ResUpClub.Infrastructure.Persistence;
 namespace ResUpClub.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260611175801_ConvertAllEnumsToString")]
+    partial class ConvertAllEnumsToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -593,12 +596,7 @@ namespace ResUpClub.Infrastructure.Data.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.HasIndex("ProfileId", "ClubId")
                         .IsUnique();
@@ -674,12 +672,7 @@ namespace ResUpClub.Infrastructure.Data.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.HasIndex("ProfileId", "ClubId")
                         .IsUnique();
@@ -891,14 +884,7 @@ namespace ResUpClub.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ResUpClub.Domain.Entities.AboutUser.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.Navigation("Profile");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ResUpClub.Domain.Entities.Information.OutClub", b =>
@@ -909,13 +895,7 @@ namespace ResUpClub.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ResUpClub.Domain.Entities.AboutUser.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Profile");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ResUpClub.Domain.Entities.Information.Profile", b =>
