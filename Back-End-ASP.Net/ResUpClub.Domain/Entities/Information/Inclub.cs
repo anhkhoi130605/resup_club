@@ -34,6 +34,8 @@ namespace ResUpClub.Domain.Entities.Information
 		// Optional link to User
 		public string? UserId { get; set; }
 
+		public IsActiveClubEnum? IsActiveClub { get; set; }
+
 		public virtual User? User { get; set; }
 	}
 }

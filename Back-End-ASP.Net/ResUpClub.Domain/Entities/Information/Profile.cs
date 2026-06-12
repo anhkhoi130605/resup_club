@@ -9,8 +9,10 @@ using ResUpClub.Domain.Entities.RoomIformation;
 using ResUpClub.Domain.Entities.AboutUser;
 namespace ResUpClub.Domain.Entities.Information
 {
+    //Profile of User
 	public class Profile : BaseEntity
 	{
+
 		public string UserId { get; set; } = null!;
 
 		public string? DepartmentId { get; set; }

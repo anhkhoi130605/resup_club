@@ -19,8 +19,8 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.UserConfiguration
 				.HasForeignKey(d => d.RoleId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			// Profile one-to-one relationship (Profile owns FK)
-			builder.HasOne(d => d.StudentProfile)
+            // Profile one-to-one relationship (Profile owns FK)
+			builder.HasOne(d => d.Profile)
 				.WithOne(p => p.User)
 				.HasForeignKey<Profile>(p => p.UserId)
 				.OnDelete(DeleteBehavior.Cascade);
@@ -38,6 +38,8 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.UserConfiguration
 				.HasConversion<string>()
 				.IsRequired()
 				.HasDefaultValue(UserStatusEnum.Active);
+           // InformationOfSchool: create unique index on StudentId
+			builder.HasIndex(d => d.StudentId).IsUnique();
 		}
 	}
 
@@ -45,7 +47,7 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.UserConfiguration
 	{
 		public void Configure(EntityTypeBuilder<Profile> builder)
 		{
-			builder.HasIndex(d => d.UserId).IsUnique();
+            builder.HasIndex(d => d.UserId).IsUnique();
 
 			builder.HasOne(d => d.Department)
 				.WithMany()

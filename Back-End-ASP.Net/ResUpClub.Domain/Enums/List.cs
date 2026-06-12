@@ -11,5 +11,17 @@ namespace ResUpClub.Domain.Enums
 			BlackList,
 			WhiteList
 		}
+		public enum IsActiveClubEnum
+		{
+			Active,
+			Inactive
+		}
+		public enum DepartmentOfClubEnum
+		{
+			 BCN,
+			 Biz,
+			 HR,
+			 Media,
+		}
 	}
 }

@@ -99,6 +99,85 @@ namespace ResUpClub.Infrastructure.Data.Migrations
                     b.ToTable("InformationClub");
                 });
 
+            modelBuilder.Entity("ResUpClub.Domain.Entities.AboutClub.MemberInclub", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ClubId")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DepartmentOfClub")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("InclubId")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<bool?>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("IsBlackList")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("longtext")
+                        .HasDefaultValue("WhiteList");
+
+                    b.Property<string>("Position")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("ProfileId")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Role")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("timestamp(6)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClubId");
+
+                    b.HasIndex("InclubId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("ProfileId", "ClubId")
+                        .IsUnique();
+
+                    b.ToTable("MemberInclub");
+                });
+
             modelBuilder.Entity("ResUpClub.Domain.Entities.AboutClub.ProfileClub", b =>
                 {
                     b.Property<string>("Id")
@@ -315,6 +394,9 @@ namespace ResUpClub.Infrastructure.Data.Migrations
                         .HasColumnType("longtext")
                         .HasDefaultValue("Active");
 
+                    b.Property<string>("StudentId")
+                        .HasColumnType("varchar(255)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -324,6 +406,9 @@ namespace ResUpClub.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("StudentId")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -552,9 +637,12 @@ namespace ResUpClub.Infrastructure.Data.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.Property<bool?>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("IsActiveClub")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
-                        .HasDefaultValue(true);
+                        .HasColumnType("longtext")
+                        .HasDefaultValue("Active");
 
                     b.Property<string>("IsBlackList")
                         .IsRequired()
@@ -797,6 +885,39 @@ namespace ResUpClub.Infrastructure.Data.Migrations
                     b.ToTable("Departments");
                 });
 
+            modelBuilder.Entity("ResUpClub.Domain.Entities.AboutClub.MemberInclub", b =>
+                {
+                    b.HasOne("ResUpClub.Domain.Entities.AboutClub.InformationClub", "Club")
+                        .WithMany()
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResUpClub.Domain.Entities.Information.Inclub", "Inclub")
+                        .WithMany()
+                        .HasForeignKey("InclubId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ResUpClub.Domain.Entities.Information.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResUpClub.Domain.Entities.AboutUser.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Club");
+
+                    b.Navigation("Inclub");
+
+                    b.Navigation("Profile");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ResUpClub.Domain.Entities.AboutClub.ProfileClub", b =>
                 {
                     b.HasOne("ResUpClub.Domain.Entities.AboutClub.InformationClub", "Club")
@@ -926,7 +1047,7 @@ namespace ResUpClub.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ResUpClub.Domain.Entities.AboutUser.User", "User")
-                        .WithOne("StudentProfile")
+                        .WithOne("Profile")
                         .HasForeignKey("ResUpClub.Domain.Entities.Information.Profile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -957,7 +1078,7 @@ namespace ResUpClub.Infrastructure.Data.Migrations
                 {
                     b.Navigation("Notifications");
 
-                    b.Navigation("StudentProfile");
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("ResUpClub.Domain.Entities.Information.Profile", b =>

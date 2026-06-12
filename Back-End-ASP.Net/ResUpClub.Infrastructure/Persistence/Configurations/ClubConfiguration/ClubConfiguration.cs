@@ -57,6 +57,7 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.ClubConfiguration
 	{
 		public void Configure(EntityTypeBuilder<Inclub> builder)
 		{
+		    
 			// ProfileId is required and Foreign Key
 			builder.Property(d => d.ProfileId)
 				.IsRequired()
@@ -76,8 +77,9 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.ClubConfiguration
 				.HasMaxLength(100);
 
 			// Default IsActive to true
-			builder.Property(d => d.IsActive)
-				.HasDefaultValue(true);
+			builder.Property(d => d.IsActiveClub)
+			    .HasConversion<string>()
+				.HasDefaultValue(IsActiveClubEnum.Active);
 
 			// Department
 			builder.Property(d => d.Department)
@@ -112,6 +114,65 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.ClubConfiguration
 			// Create index for ProfileId and ClubId
 			builder.HasIndex(d => new { d.ProfileId, d.ClubId })
 				.IsUnique();
+		}
+	}
+
+	public class MemberInclubConfiguration : IEntityTypeConfiguration<MemberInclub>
+	{
+		public void Configure(EntityTypeBuilder<ResUpClub.Domain.Entities.AboutClub.MemberInclub> builder)
+		{
+			// ProfileId and ClubId
+			builder.Property(d => d.ProfileId)
+				.IsRequired()
+				.HasMaxLength(255);
+
+			builder.Property(d => d.ClubId)
+				.IsRequired()
+				.HasMaxLength(255);
+
+			// Role and Position
+			builder.Property(d => d.Role)
+				.HasMaxLength(100);
+
+			builder.Property(d => d.Position)
+				.HasMaxLength(100);
+
+			// Defaults
+			builder.Property(d => d.IsActive)
+				.HasDefaultValue(true);
+
+			// Enum conversions to string
+			builder.Property(d => d.IsBlackList)
+				.HasConversion<string>()
+				.HasDefaultValue(IsBlackListEnum.WhiteList);
+
+			builder.Property(d => d.DepartmentOfClub)
+				.HasConversion<string>();
+
+			// Optional link to Inclub
+			builder.Property(d => d.InclubId)
+				.HasMaxLength(255);
+
+			builder.HasOne(d => d.Inclub)
+				.WithMany()
+				.HasForeignKey(d => d.InclubId)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			// FKs to Profile and User
+			builder.HasOne(d => d.Profile)
+				.WithMany()
+				.HasForeignKey(d => d.ProfileId)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			builder.HasOne(d => d.User)
+				.WithMany()
+				.HasForeignKey(d => d.UserId)
+				.OnDelete(DeleteBehavior.SetNull);
+
+			// Unique per profile+club
+			builder.HasIndex(d => new { d.ProfileId, d.ClubId }).IsUnique();
+			builder.Property(d => d.DepartmentOfClub)
+				.HasConversion<string>();
 		}
 	}
 
