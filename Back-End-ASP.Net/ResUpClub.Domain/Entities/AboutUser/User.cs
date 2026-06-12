@@ -37,11 +37,12 @@ public partial class User : BaseEntity
 
 	//public DateTime? DeletedAt { get; set; }
 
-	public virtual Profile? StudentProfile { get; set; }
+	public virtual Profile? Profile { get; set; }
 
 	public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
 	public virtual Role Role { get; set; } = null!;
+	public string? StudentId { get; set; }
 
 	public MemberInOrOutClubEnum MemberInOrOutClub { get; set; }
 }
