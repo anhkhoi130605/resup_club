@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ResUpClub.Domain.Entities;
+using ResUpClub.Domain.Entities.Information;
+using ResUpClub.Domain.Entities.AboutUser;
+using static ResUpClub.Domain.Enums.UserEnum;
 
 namespace ResUpClub.Infrastructure.Persistence.Configurations.UserConfiguration
 {
@@ -17,17 +19,27 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.UserConfiguration
 				.HasForeignKey(d => d.RoleId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			// Profile one-to-one relationship (Profile owns FK)
-			builder.HasOne(d => d.StudentProfile)
+            // Profile one-to-one relationship (Profile owns FK)
+			builder.HasOne(d => d.Profile)
 				.WithOne(p => p.User)
 				.HasForeignKey<Profile>(p => p.UserId)
 				.OnDelete(DeleteBehavior.Cascade);
-
+			builder.Property(d => d.MemberInOrOutClub)
+				.HasConversion<string>()
+				.IsRequired()
+				.HasMaxLength(100)
+				.HasDefaultValue(MemberInOrOutClubEnum.OutClub);
 			// Notifications
 			builder.HasMany(d => d.Notifications)
 				.WithOne(p => p.User)
 				.HasForeignKey(p => p.UserId)
 				.OnDelete(DeleteBehavior.Cascade);
+			builder.Property(d=>d.Status)
+				.HasConversion<string>()
+				.IsRequired()
+				.HasDefaultValue(UserStatusEnum.Active);
+           // InformationOfSchool: create unique index on StudentId
+			builder.HasIndex(d => d.StudentId).IsUnique();
 		}
 	}
 
@@ -35,12 +47,20 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.UserConfiguration
 	{
 		public void Configure(EntityTypeBuilder<Profile> builder)
 		{
-			builder.HasIndex(d => d.UserId).IsUnique();
+            builder.HasIndex(d => d.UserId).IsUnique();
 
 			builder.HasOne(d => d.Department)
 				.WithMany()
 				.HasForeignKey(d => d.DepartmentId)
 				.OnDelete(DeleteBehavior.SetNull);
+		}
+	}
+	public class RoleConfiguration : IEntityTypeConfiguration<Role>
+	{
+		public void Configure(EntityTypeBuilder<Role> builder)
+		{
+			builder.Property(d => d.RoleName)
+				.HasConversion<string>();
 		}
 	}
 }
