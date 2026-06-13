@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ResUpClub.Application.Services.UserService
+namespace ResUpClub.Application.Common.Behaviors
 {
-	internal class UserService
+	internal class Logging
 	{
 	}
 }
