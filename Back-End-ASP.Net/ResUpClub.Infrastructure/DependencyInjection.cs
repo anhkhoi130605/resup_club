@@ -17,6 +17,8 @@ using ResUpClub.Infrastructure.Repository;
 
 namespace ResUpClub.Infrastructure.ConfigModel;
 
+namespace ResUpClub.Infrastructure.Extensions;
+
 public static class DependencyInjection
 {
 	public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
@@ -33,7 +35,7 @@ public static class DependencyInjection
 		services.Configure<RedisSettings>(configuration.GetSection("Redis"));
 
 		// 2. Register core services
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+		services.AddScoped<IUnitOfWork, UnitOfWork>();
 		services.AddScoped<IJWTTokenGenerator, JWTTokenGenerator>();
 		services.AddScoped<IEmailService, SmtpEmailService>();
 		services.AddScoped<IStorageService, CloudinaryStorageService>();
@@ -60,6 +62,8 @@ public static class DependencyInjection
 		.AddCookie()
 		.AddJwtBearer(options =>
 		{
+			// Cấu hình JwtBearer bảo mật cho các API thông thường sau này khi React gọi lên
+			// (Thêm gói Microsoft.AspNetCore.Authentication.JwtBearer nếu chưa có)
 			options.TokenValidationParameters = new TokenValidationParameters
 			{
 				ValidateIssuer = true,
