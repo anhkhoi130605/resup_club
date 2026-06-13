@@ -2,6 +2,8 @@
 using ResUpClub.Infrastructure.ConfigModel;
 using ResUpClub.Infrastructure.Persistence;
 using ResUpClub.Infrastructure;
+using MediatR;
+using ResUpClub.Application.Features.Authentication.Register.Handler;
 using ResUpClub.Infrastructure.ConfigModel;
 namespace ResUpClub.API
 {
@@ -39,8 +41,11 @@ namespace ResUpClub.API
 				});
 			});
 
-			// 5. Nạp toàn bộ cấu hình hạ tầng (JWT, Google Auth, Redis, Mail, Repositories...)
+		// 5. Nạp toàn bộ cấu hình hạ tầng (JWT, Google Auth, Redis, Mail, Repositories...)
 			builder.Services.AddInfrastructureServices(builder.Configuration);
+
+		// 6. Đăng ký MediatR để inject IMediator và tìm các handler trong assembly Application
+		builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(GoogleRegisterHandler).Assembly));
 
 			var app = builder.Build();
 
@@ -65,9 +70,7 @@ namespace ResUpClub.API
 			// Kiểm tra danh tính và phân quyền (Auth luôn chạy sau CORS và trước Map)
 			app.UseAuthentication();
 			app.UseAuthorization();
-
 			app.MapControllers();
-
 			app.Run();
 		}
 	}

@@ -1,7 +1,8 @@
 import React from 'react'
 import { Header } from './shared/components'
 import { Routes, Route } from 'react-router-dom'
-import Login from './login/login'
+import Login from './Authentication/login/login'
+import Register from './Authentication/Register/register'
 import './shared/styles/theme.css'
 import './App.css'
 
@@ -44,6 +45,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
       <footer className="footer">
         <p>&copy; 2024 ResUp Club. All rights reserved.</p>

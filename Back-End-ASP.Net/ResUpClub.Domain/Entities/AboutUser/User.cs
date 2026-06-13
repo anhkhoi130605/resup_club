@@ -42,7 +42,7 @@ public partial class User : BaseEntity
 	public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
 	public virtual Role Role { get; set; } = null!;
-	public string? StudentId { get; set; }
+	public StudentCodeEnum StudentId { get; set; }
 
 	public Gender? Gender { get; set; }
 

@@ -42,6 +42,9 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.UserConfiguration
 			builder.HasIndex(d => d.StudentId).IsUnique();
 			builder.Property(d => d.Gender)
 				.HasConversion<string>();
+			builder.Property(d=>d.StudentId)
+				.HasConversion<string>()
+				.HasMaxLength(100);
 		}
 	}
 
@@ -62,7 +65,8 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.UserConfiguration
 		public void Configure(EntityTypeBuilder<Role> builder)
 		{
 			builder.Property(d => d.RoleName)
-				.HasConversion<string>();
+				.HasConversion<string>()
+				.HasDefaultValue(RoleEnum.User);
 		}
 	}
 }

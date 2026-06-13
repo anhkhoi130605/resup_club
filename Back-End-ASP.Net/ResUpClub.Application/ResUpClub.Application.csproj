@@ -7,16 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Authentication\Email\**" />
+    <EmbeddedResource Remove="Features\Authentication\Email\**" />
+    <None Remove="Features\Authentication\Email\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ResUpClub.Domain\ResUpClub.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="14.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.11" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\Authentication\Email\" />
   </ItemGroup>
 
 </Project>

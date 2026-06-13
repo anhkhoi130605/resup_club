@@ -17,10 +17,13 @@ export function Header() {
           <Link to="/" className="nav-item">Home</Link>
           <Link to="/about" className="nav-item">About</Link>
           <Link to="/events" className="nav-item">Events</Link>
-          <Link to="/contact" className="nav-item">Contact</Link>
-          <Link to="/login" className="btn-login" style={{ textDecoration: 'none' }}>
+            <Link to="/contact" className="nav-item">Contact</Link>
+            <Link to="/register" className="nav-item" style={{ textDecoration: 'none' }}>
+              Register
+            </Link>
+            <Link to="/login" className="btn-login" style={{ textDecoration: 'none' }}>
               Login
-          </Link>
+            </Link>
         </nav>
       </div>
     </header>
