@@ -1,47 +1,55 @@
-﻿using MDriven.MDrivenServer;
+﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using ResUpClub.Application.Interfaces.Authentication;
+using ResUpClub.Application.Interfaces.ManageTrancsaction;
 using ResUpClub.Application.Interfaces.Storage;
+using ResUpClub.Application.Interfaces; // IEmailService
+using ResUpClub.Infrastructure.Services; // SmtpEmailService
 using ResUpClub.Domain.ConfigModel;
 using ResUpClub.Infrastructure.Authentication;
+using ResUpClub.Infrastructure.Persistence.Configurations.AuthenticationConfig;
 using ResUpClub.Infrastructure.Persistence.Storage;
 using ResUpClub.Infrastructure.Repository;
 
-
-namespace ResUpClub.Infrastructure.Extensions;
+namespace ResUpClub.Infrastructure.ConfigModel;
 
 public static class DependencyInjection
 {
 	public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
 	{
-		// 1. Nạp cấu hình từ appsettings.json vào Options (Options Pattern)
-		services.Configure<JwtTokenGenerator>(configuration.GetSection("Jwt"));
+		// 1. Bind configuration sections
+		// JWTConfiguration is a POCO used by infrastructure JwtTokenGenerator
+		var jwtConfig = configuration.GetSection("Jwt").Get<JWTConfiguration>() ?? new JWTConfiguration();
+		services.AddSingleton(jwtConfig);
+
+		// Use Options pattern for other settings consumed via IOptions<T>
 		services.Configure<CloudinarySettings>(configuration.GetSection("Cloudinary"));
 		services.Configure<StorageSettings>(configuration.GetSection("Storage"));
 		services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
 		services.Configure<RedisSettings>(configuration.GetSection("Redis"));
 
-		// 2. Đăng ký các Service xử lý Logic cốt lõi
-		services.AddScoped<IUnitOfWork, UnitOfWork>();
-		services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-		services.AddScoped<IEmailService, EmailService>();
+		// 2. Register core services
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+		services.AddScoped<IJWTTokenGenerator, JWTTokenGenerator>();
+		services.AddScoped<IEmailService, SmtpEmailService>();
 		services.AddScoped<IStorageService, CloudinaryStorageService>();
 
-		// 3. Cấu hình Redis Cache
+		// 3. Configure Redis Cache
 		var redisSettings = configuration.GetSection("Redis").Get<RedisSettings>();
-		if (redisSettings != null && !string.IsNullOrEmpty(redisSettings.ConnectionString))
+		if (redisSettings != null && !string.IsNullOrEmpty(redisSettings.Configuration))
 		{
 			services.AddStackExchangeRedisCache(options =>
 			{
-				options.Configuration = redisSettings.ConnectionString;
+				options.Configuration = redisSettings.Configuration;
 				options.InstanceName = redisSettings.InstanceName;
 			});
 		}
 
-		// 4. Cấu hình xác thực người dùng (Authentication ngầm cho Google)
-		var jwtSettings = configuration.GetSection("Jwt").Get<JwtOptions>();
+		// 4. Authentication configuration (Google + JWT for APIs)
 		var googleSettings = configuration.GetSection("Authentication:Google");
 
 		services.AddAuthentication(options =>
@@ -49,20 +57,18 @@ public static class DependencyInjection
 			options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 			options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 		})
-		.AddCookie() // Cookie trung gian giữ phiên của Google trả về
+		.AddCookie()
 		.AddJwtBearer(options =>
 		{
-			// Cấu hình JwtBearer bảo mật cho các API thông thường sau này khi React gọi lên
-			// (Thêm gói Microsoft.AspNetCore.Authentication.JwtBearer nếu chưa có)
 			options.TokenValidationParameters = new TokenValidationParameters
 			{
 				ValidateIssuer = true,
 				ValidateAudience = true,
 				ValidateLifetime = true,
 				ValidateIssuerSigningKey = true,
-				ValidIssuer = jwtSettings.Issuer,
-				ValidAudience = jwtSettings.Audience,
-				IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret))
+				ValidIssuer = jwtConfig.Issuer,
+				ValidAudience = jwtConfig.Audience,
+				IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Key ?? string.Empty))
 			};
 		})
 		.AddGoogle(options =>

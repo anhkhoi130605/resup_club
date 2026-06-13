@@ -5,6 +5,7 @@ using System.Text;
 using ResUpClub.Infrastructure.Persistence.Configurations.AuthenticationConfig;
 using ResUpClub.Infrastructure.Persistence;
 using ResUpClub.Infrastructure;
+using ResUpClub.Infrastructure.ConfigModel;
 namespace ResUpClub.API
 {
 	public class Program
@@ -37,7 +38,7 @@ namespace ResUpClub.API
 			builder.Services.AddOpenApi();
 
             // Register infrastructure services (including JWT service registration)
-			builder.Services.AddInfrastructure(builder.Configuration);
+			builder.Services.AddInfrastructureServices(builder.Configuration);
 
 			// Configure JWT authentication
 			var jwtOptions = builder.Configuration.GetSection("Jwt").Get<JWTConfiguration>() ?? new JWTConfiguration();
