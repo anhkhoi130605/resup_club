@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using ResUpClub.Application.Common.Authentication;
+using ResUpClub.Infrastructure.Persistence.Configurations.AuthenticationConfig;
 using ResUpClub.Infrastructure.Persistence;
 using ResUpClub.Infrastructure.Authentication;
 namespace ResUpClub.API
@@ -40,7 +40,7 @@ namespace ResUpClub.API
 			builder.Services.AddInfrastructure(builder.Configuration);
 
 			// Configure JWT authentication
-			var jwtOptions = builder.Configuration.GetSection("Jwt").Get<JWTOptions>() ?? new JWTOptions();
+			var jwtOptions = builder.Configuration.GetSection("Jwt").Get<JWTConfiguration>() ?? new JWTConfiguration();
 			builder.Services.AddAuthentication(options =>
 			{
 				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -54,7 +54,7 @@ namespace ResUpClub.API
 					ValidateAudience = true,
 					ValidAudience = jwtOptions.Audience,
 					ValidateIssuerSigningKey = true,
-					IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtOptions.Secret)),
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtOptions.Key ?? string.Empty)),
 					ValidateLifetime = true,
 					ClockSkew = TimeSpan.Zero
 				};

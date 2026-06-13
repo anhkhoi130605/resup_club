@@ -16,11 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="10.4.0" />
-       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
-       <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.0.12" />
-      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
-      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.35.0" />
+    <ProjectReference Include="..\ResUpClub.Application\ResUpClub.Application.csproj" />
   </ItemGroup>
 
 </Project>
