@@ -4,7 +4,9 @@ using System.Text;
 
 namespace ResUpClub.Application.DTOs.Authentication
 {
-	internal class LoginRequestDTO
+	public class LoginRequestDTO
 	{
+		public string Email { get; set; } = default!;
+		public string Password { get; set; } = default!;
 	}
 }

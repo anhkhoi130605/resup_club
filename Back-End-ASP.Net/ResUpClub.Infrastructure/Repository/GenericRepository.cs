@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ResUpClub.Domain.Entities.Config;
 using ResUpClub.Infrastructure.Persistence;
-using ResUpClub.Infrastructure.Repository.Abstractions;
+using ResUpClub.Application.Interfaces.ManageTrancsaction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
