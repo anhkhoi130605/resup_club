@@ -4,7 +4,10 @@ using System.Text;
 
 namespace ResUpClub.Application.DTOs.Authentication
 {
-	internal class LoginResponseDTO
+	public class LoginResponseDTO
 	{
+		public string AccessToken { get; set; } = default!;
+		public string RefreshToken { get; set; } = default!;
+		public LoggedinUserDTO User { get; set; } = default!;
 	}
 }

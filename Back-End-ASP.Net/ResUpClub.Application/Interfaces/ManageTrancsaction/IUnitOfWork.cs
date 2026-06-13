@@ -8,7 +8,7 @@ using ResUpClub.Domain.Entities.Information;
 using ResUpClub.Domain.Entities.RoomIformation;
 using ResUpClub.Domain.Entities.AboutUser;
 
-namespace ResUpClub.Infrastructure.Repository.Abstractions
+namespace ResUpClub.Application.Interfaces.ManageTrancsaction
 {
     public interface IUnitOfWork : IDisposable
 	{

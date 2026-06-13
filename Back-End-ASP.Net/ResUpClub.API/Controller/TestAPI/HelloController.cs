@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using ResUpClub.Application.Common.Authentication; // Thư mục chứa JWTOptions/Interface
+using ResUpClub.Infrastructure.Persistence.Configurations.AuthenticationConfig; // Thư mục chứa JWTOptions/Interface
 using ResUpClub.Application.Interfaces;
 using ResUpClub.Application.Interfaces.Authentication; // Thư mục chứa IJwtTokenGenerator
 
