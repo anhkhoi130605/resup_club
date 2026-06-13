@@ -43,8 +43,8 @@ Project-ResUp-Club/
 │   └── ResUpClub.Infrastructure/# Repository, data access, configurations
 └── Front-End-ReactJS/           # ReactJS application
 ```
-#Clean Architechture in project
-<pre>
+##Clean Architechture in project
+```text
 📂 ResUpClub (Solution)
 ├── 📂 src
 │   ├── 🚀 ResUpClub.WebApi (Presentation Layer - Mới bổ sung)
@@ -79,14 +79,14 @@ Project-ResUp-Club/
 │       ├── 📁 Entities
 │       ├── 📁 Enums
 │       └── 📁 Exceptions (Domain-specific exceptions nếu có)
-</pre>
-#### Structure of Clean Architechture
-<pre>
+```
+## Structure of Clean Architechture
+```text
 Presentation (WebApi) ────> Infrastructure 
          │                         │
          │                         ▼
          └───────────────────> Application ──> Domain
-</pre>
+```
 ## Environment Requirements
 
 - .NET SDK 10.0 or later
@@ -134,7 +134,7 @@ The repository is currently in an early stage, so this README focuses on the ove
 
 
 
-#####Hướng dẫn code
+##Hướng dẫn code
 1. Application Service (Hoặc Use Case Handler)
 Nhiệm vụ: Chứa Logic nghiệp vụ (Business Logic) của ứng dụng. Nó trả lời cho câu hỏi: "App của tôi có tính năng gì?". Nó đứng ra điều phối các Repository, gọi các dịch vụ khác để hoàn thành một chức năng cụ thể (Ví dụ: Đăng ký thành viên, Duyệt câu lạc bộ).
 
