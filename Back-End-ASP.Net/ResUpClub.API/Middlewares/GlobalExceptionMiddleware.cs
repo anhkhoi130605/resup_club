@@ -36,14 +36,37 @@ public class GlobalExceptionMiddleware
 	{
 		context.Response.ContentType = "application/json";
 
-		// Mặc định là lỗi 500 (Internal Server Error)
-		context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+		// 1. Mặc định là lỗi 500
+		var statusCode = HttpStatusCode.InternalServerError;
+		var message = "Đã có lỗi hệ thống xảy ra. Vui lòng thử lại sau.";
+
+		// 2. Phân loại lỗi dựa trên loại Exception ném lên từ tầng Application/Domain
+		switch (exception)
+		{
+			case UnauthorizedAccessException:
+				statusCode = HttpStatusCode.Unauthorized;
+				message = "Bạn không có quyền truy cập vào tài nguyên này.";
+				break;
+
+			case KeyNotFoundException:
+				statusCode = HttpStatusCode.NotFound;
+				message = "Không tìm thấy dữ liệu yêu cầu.";
+				break;
+
+			case ArgumentException:
+				// Hoặc bất kỳ Custom Exception nào của bạn (ví dụ: BadHttpRequestException)
+				statusCode = HttpStatusCode.BadRequest;
+				message = exception.Message; // Trả về câu thông báo lỗi cụ thể (ví dụ: "Mật khẩu không chính xác")
+				break;
+		}
+
+		context.Response.StatusCode = (int)statusCode;
 
 		var response = new
 		{
 			StatusCode = context.Response.StatusCode,
-			Message = "Đã có lỗi hệ thống xảy ra. Vui lòng thử lại sau.",
-			Detail = exception.Message // Khi chạy production thì nên ẩn dòng này đi để bảo mật
+			Message = message,
+			Detail = exception.Message
 		};
 
 		var jsonResult = JsonSerializer.Serialize(response);

@@ -8,7 +8,13 @@
 
   <ItemGroup>
     <PackageReference Include="Abp" Version="10.4.0" />
+    <PackageReference Include="DocuSign.eSign.dll" Version="10.0.0" />
+    <PackageReference Include="EcoCore" Version="7.2.0.17408" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.3.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.9" />
        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+       <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.0" />
        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.9" />
        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.19.1" />
       <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />

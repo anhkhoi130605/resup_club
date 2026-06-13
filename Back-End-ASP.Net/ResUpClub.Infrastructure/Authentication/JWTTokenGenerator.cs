@@ -9,11 +9,11 @@ using ResUpClub.Infrastructure.Persistence.Configurations.AuthenticationConfig;
 using ResUpClub.Application.Interfaces.Authentication;
 namespace ResUpClub.Infrastructure.Authentication
 {
-	public class JwtTokenGenerator : IJWTTokenGenerator
+	public class JWTTokenGenerator : IJWTTokenGenerator
 	{
     private readonly JWTConfiguration _jwtOptions;
 
-	public JwtTokenGenerator(JWTConfiguration jwtOptions)
+	public JWTTokenGenerator(JWTConfiguration jwtOptions)
 	{
 		_jwtOptions = jwtOptions ?? throw new ArgumentNullException(nameof(jwtOptions));
 	}
@@ -23,8 +23,8 @@ namespace ResUpClub.Infrastructure.Authentication
             var key = Encoding.UTF8.GetBytes(_jwtOptions.Key ?? string.Empty);
 			var claimList = new List<Claim>
 			{
-				new System.Security.Claims.Claim(JwtRegisteredClaimNames.Sub, userId),
-				new System.Security.Claims.Claim(JwtRegisteredClaimNames.Email, email)
+				new Claim(JwtRegisteredClaimNames.Sub, userId),
+				new Claim(JwtRegisteredClaimNames.Email, email)
 			};
 			// Thêm Roles vào Claims
 			claimList.AddRange(Role.Select(role => new Claim(ClaimTypes.Role, role)));

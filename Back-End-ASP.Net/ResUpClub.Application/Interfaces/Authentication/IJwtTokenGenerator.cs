@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ResUpClub.Domain.Entities.AboutUser;
 
 namespace ResUpClub.Application.Interfaces.Authentication
 {

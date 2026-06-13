@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Header.css';
 
 export function Header() {
@@ -13,11 +14,13 @@ export function Header() {
           </div>
         </div>
         <nav className="nav-menu">
-          <a href="/" className="nav-item">Home</a>
-          <a href="/about" className="nav-item">About</a>
-          <a href="/events" className="nav-item">Events</a>
-          <a href="/contact" className="nav-item">Contact</a>
-          <button className="btn-login">Login</button>
+          <Link to="/" className="nav-item">Home</Link>
+          <Link to="/about" className="nav-item">About</Link>
+          <Link to="/events" className="nav-item">Events</Link>
+          <Link to="/contact" className="nav-item">Contact</Link>
+          <Link to="/login" className="btn-login" style={{ textDecoration: 'none' }}>
+              Login
+          </Link>
         </nav>
       </div>
     </header>

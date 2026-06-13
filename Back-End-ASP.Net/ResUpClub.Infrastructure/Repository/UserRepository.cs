@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ResUpClub.Domain.Entities.AboutUser;
 using ResUpClub.Infrastructure.Persistence;
-using ResUpClub.Infrastructure.Repository.Abstractions;
+using ResUpClub.Application.Interfaces.ManageTrancsaction;
 
 namespace ResUpClub.Infrastructure.Repository;
 

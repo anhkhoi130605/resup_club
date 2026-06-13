@@ -10,7 +10,7 @@ using ResUpClub.Domain.Entities.Information;
 using ResUpClub.Domain.Entities.RoomIformation;
 using ResUpClub.Domain.Entities.AboutUser;
 using ResUpClub.Infrastructure.Persistence;
-using ResUpClub.Infrastructure.Repository.Abstractions;
+using ResUpClub.Application.Interfaces.ManageTrancsaction;
 
 namespace ResUpClub.Infrastructure.Repository
 {
@@ -33,7 +33,7 @@ namespace ResUpClub.Infrastructure.Repository
 		public UnitOfWork(AppDbContext ctx, IUserRepository userRepository)
 		{
 			_ctx = ctx ?? throw new ArgumentNullException(nameof(ctx));
-			User = userRepository ?? new UserRepository(_ctx);
+			User = userRepository ?? (IUserRepository)new UserRepository(_ctx);
 
 			// Initialize generic repositories
 			Profile = new GenericRepository<Profile>(_ctx);
