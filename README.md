@@ -78,6 +78,13 @@ Project-ResUp-Club/
 │       ├── 📁 Entities
 │       ├── 📁 Enums
 │       └── 📁 Exceptions (Domain-specific exceptions nếu có)
+#### Structure of Clean Architechture
+
+Presentation (WebApi) ────> Infrastructure 
+         │                         │
+         │                         ▼
+         └───────────────────> Application ──> Domain
+
 ## Environment Requirements
 
 - .NET SDK 10.0 or later
