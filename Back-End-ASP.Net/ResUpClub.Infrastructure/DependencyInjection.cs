@@ -75,10 +75,12 @@ public static class DependencyInjection
 				IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Key ?? string.Empty))
 			};
 		})
-		.AddGoogle(options =>
+       .AddGoogle(options =>
 		{
 			options.ClientId = googleSettings["ClientId"]!;
 			options.ClientSecret = googleSettings["ClientSecret"]!;
+			// Google will redirect to this path after consent. This must match the
+			// Authorized redirect URI configured in Google Cloud Console (including scheme and port).
 			options.CallbackPath = "/signin-google";
 		});
 

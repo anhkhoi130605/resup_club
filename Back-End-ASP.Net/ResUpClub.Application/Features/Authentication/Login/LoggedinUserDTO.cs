@@ -13,5 +13,6 @@ namespace ResUpClub.Application.DTOs.Authentication
 		public string? AvatarUrl { get; set; }
 		public string Role { get; set; } = default!;
 		public MemberInOrOutClubEnum MemberInOrOutClub { get; set; }
+		public string? StudentId { get; set; }
 	}
 }

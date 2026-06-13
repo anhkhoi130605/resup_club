@@ -1,0 +1,51 @@
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: radial-gradient(circle at top left, rgba(255, 167, 75, 0.28), transparent 35%),
+    linear-gradient(135deg, #ff4f00 0%, #ff8e3f 45%, #ffb56b 100%);
+}
+.register-shell {
+  width: 100%;
+  max-width: 520px;
+}
+.register-card {
+  background: linear-gradient(180deg, rgba(255, 250, 246, 0.98), #fff);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+.register-brand {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.register-logo { width: 56px; height: 56px; object-fit: cover; border-radius: 12px; }
+.register-form label { display: block; margin-bottom: 12px; font-size: 14px; font-weight: 600; color: #333; }
+.register-form input { width: 100%; padding: 12px 14px; margin-top: 6px; border: 1px solid #eee; border-radius: 12px; background: #fafafa; }
+.btn-submit { width: 100%; margin-top: 12px; padding: 12px 14px; background: linear-gradient(135deg, #ff5a00 0%, #ff9040 100%); color: #fff; border: none; border-radius: 999px; cursor: pointer; font-weight: 700; }
+.register-footer { margin-top: 14px; display: flex; gap: 8px; align-items: center; }
+.login-link { color: #ff7a00; text-decoration: none; margin-left: 6px; }
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #8a8a8a;
+  font-weight: 600;
+  margin: 16px 0;
+}
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(0,0,0,0.04);
+}
+
+.btn-google { display: flex; align-items: center; gap: 10px; justify-content: center; width: 100%; padding: 10px 12px; margin-top: 12px; background: #fff; border: 1px solid #e9e9e9; border-radius: 12px; cursor: pointer; color: #202124; font-weight: 600; }
+.btn-google svg { width: 18px; height: 18px; }
+.btn-google:hover { box-shadow: 0 8px 18px rgba(0,0,0,0.06); transform: translateY(-2px); }
