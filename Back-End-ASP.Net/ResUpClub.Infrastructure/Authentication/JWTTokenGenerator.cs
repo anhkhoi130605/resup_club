@@ -4,24 +4,23 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using ResUpClub.Application.Common.Authentication;
+using ResUpClub.Infrastructure.Persistence.Configurations.AuthenticationConfig;
 using ResUpClub.Application.Interfaces.Authentication;
 namespace ResUpClub.Infrastructure.Authentication
 {
 	public class JwtTokenGenerator : IJWTTokenGenerator
 	{
-    private readonly JWTOptions _jwtOptions;
+    private readonly JWTConfiguration _jwtOptions;
 
-	public JwtTokenGenerator(JWTOptions jwtOptions)
+	public JwtTokenGenerator(JWTConfiguration jwtOptions)
 	{
 		_jwtOptions = jwtOptions ?? throw new ArgumentNullException(nameof(jwtOptions));
 	}
 		public string GenerateToken(string userId, string email, IEnumerable<string> Role)
 		{
 			var tokenHandler = new JwtSecurityTokenHandler();
-			var key = Encoding.ASCII.GetBytes(_jwtOptions.Secret);
+            var key = Encoding.UTF8.GetBytes(_jwtOptions.Key ?? string.Empty);
 			var claimList = new List<Claim>
 			{
 				new System.Security.Claims.Claim(JwtRegisteredClaimNames.Sub, userId),
@@ -34,7 +33,7 @@ namespace ResUpClub.Infrastructure.Authentication
 				Audience = _jwtOptions.Audience,
 				Issuer = _jwtOptions.Issuer,
 				Subject = new ClaimsIdentity(claimList),
-				Expires = DateTime.UtcNow.AddMinutes(_jwtOptions.ExpiryInMinutes),
+				Expires = DateTime.UtcNow.AddMinutes(_jwtOptions.ExpiresMinutes),
 				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
 			};
 
