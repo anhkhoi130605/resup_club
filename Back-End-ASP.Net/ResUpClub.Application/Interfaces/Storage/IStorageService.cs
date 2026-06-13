@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.IO;
+using System.Threading.Tasks;
 
 namespace ResUpClub.Application.Interfaces.Storage
 {
-	public class IStorageService
+	public interface IStorageService
 	{
+		Task<string> UploadAsync(Stream fileStream, string fileName);
+		Task DeleteAsync(string fileUrl);
 	}
 }

@@ -5,6 +5,7 @@ using System.Text;
 using ResUpClub.Infrastructure.Persistence.Configurations.AuthenticationConfig;
 using ResUpClub.Infrastructure.Persistence;
 using ResUpClub.Infrastructure;
+using ResUpClub.Infrastructure.ConfigModel;
 namespace ResUpClub.API
 {
 	public class Program
