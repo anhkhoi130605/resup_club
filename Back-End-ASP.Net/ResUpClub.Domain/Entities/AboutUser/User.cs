@@ -44,5 +44,7 @@ public partial class User : BaseEntity
 	public virtual Role Role { get; set; } = null!;
 	public string? StudentId { get; set; }
 
+	public Gender? Gender { get; set; }
+
 	public MemberInOrOutClubEnum MemberInOrOutClub { get; set; }
 }

@@ -24,5 +24,10 @@ namespace ResUpClub.Domain.Enums
 			InClub,
 			OutClub
 		}
+		public enum Gender
+		{
+			Male,
+			Female
+		}
 	}
 }

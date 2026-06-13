@@ -1,5 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using ResUpClub.Application.Common.Authentication;
 using ResUpClub.Infrastructure.Persistence;
+using ResUpClub.Infrastructure.Authentication;
 namespace ResUpClub.API
 {
 	public class Program
@@ -27,8 +32,33 @@ namespace ResUpClub.API
 						.AllowAnyMethod();
 				});
 			});
+
 			// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 			builder.Services.AddOpenApi();
+
+            // Register infrastructure services (including JWT service registration)
+			builder.Services.AddInfrastructure(builder.Configuration);
+
+			// Configure JWT authentication
+			var jwtOptions = builder.Configuration.GetSection("Jwt").Get<JWTOptions>() ?? new JWTOptions();
+			builder.Services.AddAuthentication(options =>
+			{
+				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			}).AddJwtBearer(options =>
+			{
+				options.TokenValidationParameters = new TokenValidationParameters
+				{
+					ValidateIssuer = true,
+					ValidIssuer = jwtOptions.Issuer,
+					ValidateAudience = true,
+					ValidAudience = jwtOptions.Audience,
+					ValidateIssuerSigningKey = true,
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtOptions.Secret)),
+					ValidateLifetime = true,
+					ClockSkew = TimeSpan.Zero
+				};
+			});
 
 			var app = builder.Build();
 
@@ -37,10 +67,11 @@ namespace ResUpClub.API
 			{
 				app.MapOpenApi();
 			}
-
-			app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 			app.UseCors("AllowReactDev");
 
+			// Authentication middleware must come before Authorization
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.MapControllers();
