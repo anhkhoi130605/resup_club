@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ResUpClub.Infrastructure.ConfigModel;
 using ResUpClub.Infrastructure.Persistence;
-
+using ResUpClub.Infrastructure;
+using ResUpClub.Infrastructure.ConfigModel;
 namespace ResUpClub.API
 {
 	public class Program
