@@ -27,5 +27,10 @@ namespace ResUpClub.Domain.Enums
 			Male,
 			Female
 		}
+		public enum StudentCodeEnum
+		{
+		  DE,
+		  DS
+		}
 	}
 }
