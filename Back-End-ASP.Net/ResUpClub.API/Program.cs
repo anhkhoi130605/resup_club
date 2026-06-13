@@ -38,7 +38,7 @@ namespace ResUpClub.API
 			builder.Services.AddOpenApi();
 
             // Register infrastructure services (including JWT service registration)
-			builder.Services.AddInfrastructureServices(builder.Configuration);
+			builder.Services.AddInfrastructure(builder.Configuration);
 
 			// Configure JWT authentication
 			var jwtOptions = builder.Configuration.GetSection("Jwt").Get<JWTConfiguration>() ?? new JWTConfiguration();
