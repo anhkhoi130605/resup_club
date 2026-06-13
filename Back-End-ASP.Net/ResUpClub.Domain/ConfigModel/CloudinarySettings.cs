@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ResUpClub.Infrastructure.Persistence.Configurations.AuthenticationConfig
+namespace ResUpClub.Domain.ConfigModel
 {
-	public class CloudinaryConfiguration
+	public class CloudinarySettings
 	{
 		public string CloudName { get; set; } = string.Empty;
 		public string ApiKey { get; set; } = string.Empty;

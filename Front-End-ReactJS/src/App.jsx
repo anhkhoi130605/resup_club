@@ -1,32 +1,45 @@
-import { useEffect, useState } from 'react';
-import { getHello } from './api/api';
+import React from 'react'
+import { Header } from './shared/components'
+import './shared/styles/theme.css'
+import './App.css'
 
 function App() {
-  const [message, setMessage] = useState('Đang tải...');
-
-  useEffect(() => {
-    getHello()
-      .then((data) => setMessage(data.message || 'Chưa có dữ liệu'))
-      .catch(() => setMessage('Không thể kết nối API'));
-  }, []);
-
   return (
-    <div className="app-shell">
-      <header>
-        <h1>ResUpClub Frontend</h1>
-      </header>
-
-      <main>
-        <section className="card">
-          <h2>Demo kết nối backend</h2>
-          <p>{message}</p>
-          <p>
-            Bạn có thể mở `src/api/api.js` để gọi API thực tế của backend.
-          </p>
+    <div className="app">
+      <Header />
+      <main className="main-content">
+        <section className="hero">
+          <div className="hero-content">
+            <h2>Welcome to ResUp</h2>
+            <p>Raise Up The Pioneer Power</p>
+            <button className="btn btn-primary">Get Started</button>
+          </div>
+        </section>
+        
+        <section className="features">
+          <div className="feature-card">
+            <div className="feature-icon">🚀</div>
+            <h3>Innovation</h3>
+            <p>Build amazing projects with cutting-edge technology</p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">👥</div>
+            <h3>Community</h3>
+            <p>Connect with pioneers and like-minded individuals</p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">⭐</div>
+            <h3>Excellence</h3>
+            <p>Achieve outstanding results together</p>
+          </div>
         </section>
       </main>
+
+      <footer className="footer">
+        <p>&copy; 2024 ResUp Club. All rights reserved.</p>
+      </footer>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

@@ -1,0 +1,130 @@
+.header {
+  background: linear-gradient(90deg, rgba(255, 90, 0, 0.96) 0%, rgba(255, 121, 30, 0.96) 40%, rgba(255, 165, 90, 0.96) 100%);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.14);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 18px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 18px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.logo-section:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.logo {
+  height: 48px;
+  width: auto;
+  border-radius: 16px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+}
+
+.brand-info h1 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.18);
+}
+
+.tagline {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.nav-item {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  padding: 10px 14px;
+  border-radius: 999px;
+}
+
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.btn-login {
+  background-color: rgba(255, 255, 255, 0.94);
+  color: #d94b00;
+  border: none;
+  padding: 11px 26px;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-size: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.btn-login:hover {
+  background-color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nav-menu {
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .brand-info h1 {
+    font-size: 24px;
+  }
+
+  .nav-item {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .btn-login {
+    width: 100%;
+    max-width: 220px;
+    align-self: center;
+    padding: 10px 22px;
+    font-size: 13px;
+  }
+}

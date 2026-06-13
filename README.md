@@ -43,6 +43,47 @@ Project-ResUp-Club/
 │   └── ResUpClub.Infrastructure/# Repository, data access, configurations
 └── Front-End-ReactJS/           # ReactJS application
 ```
+#Clean Architechture in project
+📂 ResUpClub (Solution)
+├── 📂 src
+│   ├── 🚀 ResUpClub.WebApi (Presentation Layer - Mới bổ sung)
+│   │   ├── 📁 Controllers
+│   │   ├── 📁 Middlewares (Xử lý Exception, Logging)
+│   │   └── 📄 Program.cs
+│   │
+│   ├── ⚙️ ResUpClub.Infrastructure (Infrastructure Layer)
+│   │   ├── 📁 Authentication (Triển khai JWT Token Generator)
+│   │   ├── 📁 BackgroundJobs (Nếu có chạy ngầm)
+│   │   └── 📁 Persistence (Gom Data + Repository lại đây)
+│   │       ├── 📁 Configurations (Cấu hình Fluent API cho thực thể)
+│   │       ├── 📁 Migrations
+│   │       ├── 📁 Repositories (Triển khai cụ thể các Repo)
+│   │       └── 📄 ApplicationDbContext.cs
+│   │
+│   ├── 🧠 ResUpClub.Application (Application Layer)
+│   │   ├── 📁 Common
+│   │   │   ├── 📁 Exceptions
+│   │   │   ├── 📁 Mappings
+│   │   │   └── 📁 Behaviors (Validation, Logging)
+│   │   ├── 📁 Features (Sắp xếp theo tính năng - Gợi ý thay thế cho DTOs/Services rời rạc)
+│   │   │   └── 📁 Clubs
+│   │   │       ├── 📁 Commands (Create, Update, Delete)
+│   │   │       └── 📁 Queries (GetById, GetAll)
+│   │   └── 📁 Interfaces (Nơi chứa các giao tiếp Core)
+│   │       ├── 📄 IApplicationDbContext.cs
+│   │       ├── 📄 IJwtTokenGenerator.cs
+│   │       └── 📁 Repositories (IClubRepository, IUnitOfWork,...)
+│   │
+│   └── 💎 ResUpClub.Domain (Domain Layer)
+│       ├── 📁 Entities
+│       ├── 📁 Enums
+│       └── 📁 Exceptions (Domain-specific exceptions nếu có)
+#### Structure of Clean Architechture
+
+Presentation (WebApi) ────> Infrastructure 
+         │                         │
+         │                         ▼
+         └───────────────────> Application ──> Domain
 
 ## Environment Requirements
 

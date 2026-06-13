@@ -40,6 +40,8 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.UserConfiguration
 				.HasDefaultValue(UserStatusEnum.Active);
            // InformationOfSchool: create unique index on StudentId
 			builder.HasIndex(d => d.StudentId).IsUnique();
+			builder.Property(d => d.Gender)
+				.HasConversion<string>();
 		}
 	}
 
