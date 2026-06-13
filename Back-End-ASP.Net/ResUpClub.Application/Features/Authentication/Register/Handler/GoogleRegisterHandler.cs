@@ -41,7 +41,7 @@ public class GoogleRegisterHandler : IRequestHandler<GoogleRegisterCommand, Logi
 
 		// 3. Nếu chưa có -> Tiến hành tạo User mới hoàn toàn (Đăng ký thành công)
 		// Lấy role mặc định từ DB (hoặc tạo nếu chưa tồn tại)
-		var roleEntity = await _unitOfWork.Roles.GetAsync(r => r.RoleName == RoleEnum.User);
+        var roleEntity = await _unitOfWork.Roles.GetAsync(r => r.RoleName == RoleEnum.User);
 		if (roleEntity == null)
 		{
 			roleEntity = new Role { RoleName = RoleEnum.User };
@@ -49,7 +49,6 @@ public class GoogleRegisterHandler : IRequestHandler<GoogleRegisterCommand, Logi
 			// Lưu để có Id
 			await _unitOfWork.SaveChangesAsync();
 		}
-
 		var newUser = new User
 		{
 			Email = email,
@@ -57,6 +56,8 @@ public class GoogleRegisterHandler : IRequestHandler<GoogleRegisterCommand, Logi
 			PasswordHash = string.Empty, // Đăng ký bằng Google thì không cần mật khẩu truyền thống
 			RoleId = roleEntity.Id,
 			Role = roleEntity,
+          // Google registration does not provide a student code. Set a default enum value.
+			StudentId = StudentCodeEnum.DE,
 			MemberInOrOutClub = MemberInOrOutClubEnum.OutClub, // Mặc định là chưa tham gia câu lạc bộ
 		};
 

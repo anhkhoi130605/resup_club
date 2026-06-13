@@ -61,7 +61,9 @@
   font-weight: 600;
 }
 
-.login-form input {
+.login-form input[type="email"],
+.login-form input[type="password"],
+.login-form input[type="text"] {
   width: 100%;
   padding: 14px 16px;
   border: 1px solid rgba(92, 92, 92, 0.17);
@@ -71,10 +73,30 @@
   font-size: 14px;
 }
 
-.login-form input:focus {
+.login-form input[type="email"]:focus,
+.login-form input[type="password"]:focus,
+.login-form input[type="text"]:focus {
   outline: none;
   border-color: rgba(255, 88, 0, 0.7);
   box-shadow: 0 0 0 4px rgba(255, 112, 20, 0.12);
+}
+
+.remember-me {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #595959;
+  font-size: 13px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.remember-me input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #ff5a00;
+  flex-shrink: 0;
 }
 
 .login-actions {
@@ -82,14 +104,6 @@
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-}
-
-.remember-me {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: #595959;
-  font-size: 13px;
 }
 
 .forgot-link,

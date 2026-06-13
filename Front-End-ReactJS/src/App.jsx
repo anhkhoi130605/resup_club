@@ -1,8 +1,9 @@
 import React from 'react'
 import { Header } from './shared/components'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Link } from 'react-router-dom'
 import Login from './Authentication/login/login'
 import Register from './Authentication/Register/register'
+import Dashboard from './shared/DashBoardForRole/Dashboard'
 import './shared/styles/theme.css'
 import './App.css'
 
@@ -13,7 +14,7 @@ function HomePage() {
         <div className="hero-content">
           <h2>Welcome to ResUp</h2>
           <p>Raise Up The Pioneer Power</p>
-          <button className="btn btn-primary">Get Started</button>
+          <Link to="/login" className="btn btn-primary">Get Started</Link>
         </div>
       </section>
       
@@ -44,6 +45,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
