@@ -2,6 +2,10 @@ import React from 'react';
 import './login.css';
 
 export default function Login() {
+  const handleGoogleLogin = () => {
+    window.location.href = "https://localhost:7176/api/auth/login-google";
+  };
+
   return (
     <div className="login-page">
       <div className="login-shell">
@@ -41,6 +45,13 @@ export default function Login() {
             <span>New to ResUp?</span>
             <a href="#" className="signup-link">Create account</a>
           </div>
+
+          <div className="divider">HOẶC</div>
+
+          <button className="btn-google" onClick={handleGoogleLogin}>
+            <img src="/images/google-icon.png" alt="Google" />
+            Tiếp tục với Google
+          </button>
         </div>
       </div>
     </div>
