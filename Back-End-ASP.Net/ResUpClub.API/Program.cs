@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ResUpClub.Infrastructure.Persistence.Configurations.AuthenticationConfig;
 using ResUpClub.Infrastructure.Persistence;
-using ResUpClub.Infrastructure.Authentication;
+using ResUpClub.Infrastructure;
 namespace ResUpClub.API
 {
 	public class Program

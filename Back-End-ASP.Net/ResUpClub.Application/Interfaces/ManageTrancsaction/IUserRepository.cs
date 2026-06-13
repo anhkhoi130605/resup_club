@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ResUpClub.Domain.Entities.AboutUser;
 
-namespace ResUpClub.Infrastructure.Repository.Abstractions
+namespace ResUpClub.Application.Interfaces.ManageTrancsaction
 {
 	public interface IUserRepository : IGenericRepository<User>
 	{
