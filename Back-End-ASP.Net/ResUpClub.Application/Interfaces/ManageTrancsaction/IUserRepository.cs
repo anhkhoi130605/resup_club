@@ -9,5 +9,6 @@ namespace ResUpClub.Application.Interfaces.ManageTrancsaction
 	{
 		Task<User?> FindByEmailAsync(string email);
 		Task<bool> ExistsByEmailAsync(string email);
+		Task<bool> ExistsStudentIdAsync(string studentId);
 	}
 }

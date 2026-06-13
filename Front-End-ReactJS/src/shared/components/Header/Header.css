@@ -23,23 +23,24 @@
   gap: 16px;
   padding: 12px 18px;
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 140, 0, 0.18);
+  border: 1px solid rgba(255, 184, 97, 0.35);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  transition: transform 0.3s ease, background 0.3s ease;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .logo-section:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 165, 90, 0.22);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
 }
 
 .logo {
   height: 48px;
   width: auto;
   border-radius: 16px;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
 }
 
 .brand-info h1 {
