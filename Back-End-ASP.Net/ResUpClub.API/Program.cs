@@ -4,7 +4,9 @@ using ResUpClub.Infrastructure.Persistence;
 using ResUpClub.Infrastructure;
 using MediatR;
 using ResUpClub.Application.Features.Authentication.Register.Handler;
+using ResUpClub.Application.Features.Authentication.Login.Handler;
 using ResUpClub.Infrastructure.ConfigModel;
+using ResUpClub.Application.Features.Authentication.Login.Handler;
 namespace ResUpClub.API
 {
 	public class Program
@@ -44,8 +46,8 @@ namespace ResUpClub.API
 		// 5. Nạp toàn bộ cấu hình hạ tầng (JWT, Google Auth, Redis, Mail, Repositories...)
 			builder.Services.AddInfrastructureServices(builder.Configuration);
 
-		// 6. Đăng ký MediatR để inject IMediator và tìm các handler trong assembly Application
-		builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(GoogleRegisterHandler).Assembly));
+		// 6. Đăng ký MediatR: quét các handlers trong assembly Application
+		builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(ResUpClub.Application.Features.Authentication.Login.Handler.RegisterCommandHandler).Assembly));
 
 			var app = builder.Build();
 

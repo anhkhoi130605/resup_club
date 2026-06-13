@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
 import './login.css';
 import Toast from '../../shared/components/Toast/Toast';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5191';
 
 export default function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [toast, setToast] = useState({ visible: false, message: '', type: 'error' });
 
   const handleGoogleLogin = () => {
-    window.location.href = 'https://localhost:7176/api/auth/login-google';
+    window.location.href = `${API_BASE_URL}/api/auth/login-google`;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('https://localhost:7176/api/auth/login', {
+      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -29,8 +32,8 @@ export default function Login() {
         return;
       }
 
-      // on success redirect to home
-      window.location.href = '/';
+      // on success redirect to dashboard
+      navigate('/dashboard');
     } catch (error) {
       setToast({ visible: true, message: 'Không thể kết nối đến máy chủ', type: 'error' });
     }

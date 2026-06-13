@@ -23,8 +23,12 @@ public class UserRepository : GenericRepository<User>, IUserRepository
 
 	public async Task<bool> ExistsStudentIdAsync(string studentId)
 	{
-		// User.StudentId is an enum (StudentCodeEnum) stored as string in DB migrations.
-		// Compare enum string representation with provided studentId value.
-		return await _context.Set<User>().AnyAsync(x => x.StudentId.ToString() == studentId);
+       // studentId may be full code like DE191038 or DS19001. Our entity stores only the prefix enum
+		// (StudentCodeEnum) so extract prefix (first 2 chars) for comparison.
+		if (string.IsNullOrWhiteSpace(studentId) || studentId.Length < 2)
+			return false;
+
+		var prefix = studentId.Substring(0, 2).ToUpperInvariant();
+		return await _context.Set<User>().AnyAsync(x => x.StudentId.ToString() == prefix);
 	}
 }
