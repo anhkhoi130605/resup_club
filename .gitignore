@@ -201,3 +201,7 @@ yarn-error.log*
 package-lock.json
 package.json
 vite.config.js
+mkcert
+Note.txt
+localhost-key.pem
+localhost.pem
