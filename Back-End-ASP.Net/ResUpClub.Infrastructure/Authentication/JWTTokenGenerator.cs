@@ -23,8 +23,8 @@ namespace ResUpClub.Infrastructure.Authentication
             var key = Encoding.UTF8.GetBytes(_jwtOptions.Key ?? string.Empty);
 			var claimList = new List<Claim>
 			{
-				new System.Security.Claims.Claim(JwtRegisteredClaimNames.Sub, userId),
-				new System.Security.Claims.Claim(JwtRegisteredClaimNames.Email, email)
+				new Claim(JwtRegisteredClaimNames.Sub, userId),
+				new Claim(JwtRegisteredClaimNames.Email, email)
 			};
 			// Thêm Roles vào Claims
 			claimList.AddRange(Role.Select(role => new Claim(ClaimTypes.Role, role)));
