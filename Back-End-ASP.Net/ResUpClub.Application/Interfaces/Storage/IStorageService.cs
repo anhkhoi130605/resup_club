@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ResUpClub.Application.Interfaces.Storage
 {
-	internal class IStorageService
+	public class IStorageService
 	{
 	}
 }
