@@ -14,10 +14,8 @@ namespace ResUpClub.Domain.Enums
 		}
 		public enum RoleEnum
 		{
-			Student,
-			Teacher,
-			Admin,
-			Club_Committee
+			User,
+			Admin
 		}
 		public enum MemberInOrOutClubEnum
 		{

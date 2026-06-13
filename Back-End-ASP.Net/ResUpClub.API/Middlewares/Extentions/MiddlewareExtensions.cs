@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 
-namespace ResUpClub.API.Middlewares
+namespace ResUpClub.API.Middlewares.Extentions
 {
 	public static class MiddlewareExtensions
 	{

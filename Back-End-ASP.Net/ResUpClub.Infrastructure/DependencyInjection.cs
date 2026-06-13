@@ -34,7 +34,9 @@ public static class DependencyInjection
 		services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
 		services.Configure<RedisSettings>(configuration.GetSection("Redis"));
 
-		// 2. Register core services
+        // 2. Register core services
+		// Register repository implementations used by UnitOfWork
+		services.AddScoped<IUserRepository, UserRepository>();
 		services.AddScoped<IUnitOfWork, UnitOfWork>();
 		services.AddScoped<IJWTTokenGenerator, JWTTokenGenerator>();
 		services.AddScoped<IEmailService, SmtpEmailService>();
