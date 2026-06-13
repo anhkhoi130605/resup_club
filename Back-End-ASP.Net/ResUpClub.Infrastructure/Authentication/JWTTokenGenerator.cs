@@ -9,11 +9,11 @@ using ResUpClub.Infrastructure.Persistence.Configurations.AuthenticationConfig;
 using ResUpClub.Application.Interfaces.Authentication;
 namespace ResUpClub.Infrastructure.Authentication
 {
-	public class JwtTokenGenerator : IJWTTokenGenerator
+	public class JWTTokenGenerator : IJWTTokenGenerator
 	{
     private readonly JWTConfiguration _jwtOptions;
 
-	public JwtTokenGenerator(JWTConfiguration jwtOptions)
+	public JWTTokenGenerator(JWTConfiguration jwtOptions)
 	{
 		_jwtOptions = jwtOptions ?? throw new ArgumentNullException(nameof(jwtOptions));
 	}
