@@ -1,7 +1,7 @@
 using MediatR;
 using ResUpClub.Application.DTOs.Authentication.Register;
-using ResUpClub.Application.DTOs.Authentication;
+using ResUpClub.Application.Features.Authentication.Register;
 
 namespace ResUpClub.Application.Features.Authentication.Register.Handler;
 
-public record RegisterCommand(RegisterUserRequestDTO Request) : IRequest<LoginResponseDTO>;
+public record RegisterCommand(RegisterUserRequestDTO Request) : IRequest<RegisterResponse>;

@@ -5,10 +5,11 @@ using ResUpClub.Application.DTOs.Authentication;
 using ResUpClub.Application.Interfaces.Authentication;
 using ResUpClub.Application.Interfaces.ManageTrancsaction;
 using static ResUpClub.Domain.Enums.UserEnum;
+using ResUpClub.Application.DTOs.Authentication.Register;
 
 namespace ResUpClub.Application.Features.Authentication.Register.Handler;
 
-public class RegisterCommandHandler : IRequestHandler<RegisterCommand, LoginResponseDTO>
+public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterResponse>
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IJWTTokenGenerator _jwtTokenGenerator;
@@ -19,7 +20,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, LoginResp
 		_jwtTokenGenerator = jwtTokenGenerator;
 	}
 
-    public async Task<LoginResponseDTO> Handle(RegisterCommand request, CancellationToken cancellationToken)
+    public async Task<RegisterResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
 	{
         // 1. Lấy dữ liệu từ DTO
 		var dto = request.Request;
@@ -63,8 +64,8 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, LoginResp
             PasswordHash = dto.Password, // store raw for now (replace with hash in production)
 			RoleId = roleEntity.Id,
 			Role = roleEntity,
-            // Parse student id prefix to enum if provided
-			StudentId = ParseStudentCode(dto.StudentId),
+            // Store full student id string if provided
+			StudentId = string.IsNullOrWhiteSpace(dto.StudentId) ? string.Empty : dto.StudentId.ToUpperInvariant(),
 			MemberInOrOutClub = MemberInOrOutClubEnum.OutClub, // Mặc định là chưa tham gia câu lạc bộ
 		};
 
@@ -75,24 +76,10 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, LoginResp
 		var roleName = roleEntity.RoleName?.ToString() ?? RoleEnum.User.ToString();
 		var accessToken = _jwtTokenGenerator.GenerateToken(newUser.Id, newUser.Email, new List<string> { roleName });
 
-		return new LoginResponseDTO
+		return new RegisterResponse
 		{
 			AccessToken = accessToken,
-			User = new LoggedinUserDTO { Email = newUser.Email, FullName = newUser.FullName }
+			User = new RegisterUserRequestDTO { Email = newUser.Email, FullName = newUser.FullName }
 		};
-	}
-
-	private static StudentCodeEnum ParseStudentCode(string? studentId)
-	{
-		if (string.IsNullOrWhiteSpace(studentId) || studentId.Length < 2)
-			return StudentCodeEnum.DE;
-
-		var prefix = studentId.Substring(0, 2).ToUpperInvariant();
-		return prefix switch
-		{
-			"DE" => StudentCodeEnum.DE,
-			"DS" => StudentCodeEnum.DS,
-			_ => StudentCodeEnum.DE
-		};
-	}
+    }
 }

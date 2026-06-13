@@ -13,7 +13,8 @@ namespace ResUpClub.Application.DTOs.Authentication.Register
 
 	   // ConfirmPassword is required for matching on registration
 	    public string? ConfirmPassword { get; set; }
-		[Required]
+        [Required]
+		[StringLength(8, MinimumLength = 8, ErrorMessage = "Mã sinh viên phải có 8 ký tự, ví dụ DE123456.")]
 		[RegularExpression("^(DE|DS)\\d{6}$", ErrorMessage = "Mã sinh viên phải có định dạng DExxxxxx hoặc DSxxxxxx.")]
 		public string? StudentId { get; set; }
 	}

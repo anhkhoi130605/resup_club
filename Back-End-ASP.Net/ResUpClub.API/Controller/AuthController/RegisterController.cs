@@ -62,11 +62,18 @@ public class RegisterController : ControllerBase
 	{
 		if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        // 1. Gói dữ liệu vào Command và bắn qua MediatR xuống tầng Application xử lý
+		// 1. Gói dữ liệu vào Command và bắn qua MediatR xuống tầng Application xử lý
 		var command = new RegisterCommand(request);
-		var registerResult = await _mediator.Send(command); // Trả về LoginResponseDTO
-
-		// 2. Trả thẳng cục dữ liệu JSON về cho Axios của React nhận lấy
-		return Ok(registerResult);
+		try
+		{
+			var registerResult = await _mediator.Send(command);
+			// 2. Trả thẳng cục dữ liệu JSON về cho Axios của React nhận lấy
+			return Ok(registerResult);
+		}
+		catch (Exception ex)
+		{
+			// Trả về BadRequest để client biết lý do (ví dụ: email hoặc mã sinh viên đã tồn tại)
+			return BadRequest(new { StatusCode = 400, Message = ex.Message, Detail = ex.InnerException?.Message });
+		}
 	}
 }

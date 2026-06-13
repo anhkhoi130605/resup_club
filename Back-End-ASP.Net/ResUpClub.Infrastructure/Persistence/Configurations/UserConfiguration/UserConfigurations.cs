@@ -42,9 +42,13 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.UserConfiguration
 			builder.HasIndex(d => d.StudentId).IsUnique();
 			builder.Property(d => d.Gender)
 				.HasConversion<string>();
-			builder.Property(d=>d.StudentId)
-				.HasConversion<string>()
-				.HasMaxLength(100);
+          builder.Property(d => d.StudentId)
+				.HasColumnType("varchar(8)")
+				.IsRequired()
+				.HasMaxLength(8);
+			// Unique index on StudentId
+			builder.HasIndex(d => d.StudentId).IsUnique();
+				 
 		}
 	}
 
