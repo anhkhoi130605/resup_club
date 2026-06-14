@@ -11,7 +11,7 @@ using ResUpClub.Application.Interfaces.ManageTrancsaction;
 namespace ResUpClub.Application.Features.Authentication.Login.Handler
 {
 	public record LoginCommand(LoginRequestDTO Request) : IRequest<LoginResponseDTO>;
-	public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseDTO>
+    public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseDTO>
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IJWTTokenGenerator _jwtTokenGenerator;
@@ -33,7 +33,7 @@ namespace ResUpClub.Application.Features.Authentication.Login.Handler
 			// Bước B: Kiểm tra mật khẩu (Đây là ví dụ kiểm tra thô, nếu bạn có mã hóa/hash thì gọi hàm verify ở đây)
 			if (user == null || user.PasswordHash != request.Request.Password)
 			{
-				throw new Exception("Tài khoản hoặc mật khẩu không chính xác.");
+				throw new ArgumentException("Tài khoản hoặc mật khẩu không chính xác.");
 			}
 
             // Bước C: Đúng tài khoản mật khẩu -> Gọi Service để sinh chuỗi ký số JWT Access Token
