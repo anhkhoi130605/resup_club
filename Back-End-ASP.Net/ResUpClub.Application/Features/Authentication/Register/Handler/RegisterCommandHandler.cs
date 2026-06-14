@@ -5,33 +5,41 @@ using ResUpClub.Application.DTOs.Authentication;
 using ResUpClub.Application.Interfaces.Authentication;
 using ResUpClub.Application.Interfaces.ManageTrancsaction;
 using static ResUpClub.Domain.Enums.UserEnum;
+using ResUpClub.Application.DTOs.Authentication.Register;
 
 namespace ResUpClub.Application.Features.Authentication.Register.Handler;
 
-public class GoogleRegisterHandler : IRequestHandler<GoogleRegisterCommand, LoginResponseDTO>
+public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterResponse>
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IJWTTokenGenerator _jwtTokenGenerator;
 
-	public GoogleRegisterHandler(IUnitOfWork unitOfWork, IJWTTokenGenerator jwtTokenGenerator)
+	public RegisterCommandHandler(IUnitOfWork unitOfWork, IJWTTokenGenerator jwtTokenGenerator)
 	{
 		_unitOfWork = unitOfWork;
 		_jwtTokenGenerator = jwtTokenGenerator;
 	}
 
-	public async Task<LoginResponseDTO> Handle(GoogleRegisterCommand request, CancellationToken cancellationToken)
+    public async Task<RegisterResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
 	{
-     // 1. Trích xuất Email từ tấm thẻ Google cấp qua Claims
-		var email = request.Principal.FindFirst(ClaimTypes.Email)?.Value;
-		var name = request.Principal.FindFirst(ClaimTypes.Name)?.Value;
+        // 1. Lấy dữ liệu từ DTO
+		var dto = request.Request;
+		var email = dto.Email;
+		var name = dto.FullName;
 
-		if (string.IsNullOrWhiteSpace(email))
+		if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(dto.Password))
 		{
-			throw new Exception("Không thể lấy email từ thông tin xác thực của Google.");
+			throw new Exception("Email hoặc mật khẩu không hợp lệ.");
 		}
 
-		// 2. Kiểm tra xem Email này đã được ai đăng ký trong DB chưa
+        // 2. Kiểm tra xem Email hoặc StudentId này đã được ai đăng ký trong DB chưa
 		var existingUser = await _unitOfWork.User.FindByEmailAsync(email);
+		if (!string.IsNullOrWhiteSpace(dto.StudentId))
+		{
+			var existsStudent = await _unitOfWork.User.ExistsStudentIdAsync(dto.StudentId);
+			if (existsStudent)
+				throw new Exception("Mã sinh viên đã tồn tại.");
+		}
 
 		if (existingUser != null)
 		{
@@ -49,15 +57,15 @@ public class GoogleRegisterHandler : IRequestHandler<GoogleRegisterCommand, Logi
 			// Lưu để có Id
 			await _unitOfWork.SaveChangesAsync();
 		}
-		var newUser = new User
+        var newUser = new User
 		{
 			Email = email,
 			FullName = name ?? string.Empty,
-			PasswordHash = string.Empty, // Đăng ký bằng Google thì không cần mật khẩu truyền thống
+            PasswordHash = dto.Password, // store raw for now (replace with hash in production)
 			RoleId = roleEntity.Id,
 			Role = roleEntity,
-          // Google registration does not provide a student code. Set a default enum value.
-			StudentId = StudentCodeEnum.DE,
+            // Store full student id string if provided
+			StudentId = string.IsNullOrWhiteSpace(dto.StudentId) ? string.Empty : dto.StudentId.ToUpperInvariant(),
 			MemberInOrOutClub = MemberInOrOutClubEnum.OutClub, // Mặc định là chưa tham gia câu lạc bộ
 		};
 
@@ -68,10 +76,10 @@ public class GoogleRegisterHandler : IRequestHandler<GoogleRegisterCommand, Logi
 		var roleName = roleEntity.RoleName?.ToString() ?? RoleEnum.User.ToString();
 		var accessToken = _jwtTokenGenerator.GenerateToken(newUser.Id, newUser.Email, new List<string> { roleName });
 
-		return new LoginResponseDTO
+		return new RegisterResponse
 		{
 			AccessToken = accessToken,
-			User = new LoggedinUserDTO { Email = newUser.Email, FullName = newUser.FullName }
+			User = new RegisterUserRequestDTO { Email = newUser.Email, FullName = newUser.FullName }
 		};
-	}
+    }
 }
