@@ -1,38 +1,78 @@
 import React, { useState } from 'react';
 import './login.css';
 import Toast from '../../shared/components/Toast/Toast';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { saveAccessToken } from '../../shared/utils/auth';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5191';
 
 export default function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [toast, setToast] = useState({ visible: false, message: '', type: 'error' });
 
   const handleGoogleLogin = () => {
-    window.location.href = 'https://localhost:7176/api/auth/login-google';
+    window.location.href = `${API_BASE_URL}/api/auth/login-google`;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('📝 Bắt đầu login với email:', email);
+    
     try {
-      const res = await fetch('https://localhost:7176/api/auth/login', {
+      console.log('🔗 Gửi request tới:', `${API_BASE_URL}/api/auth/login`);
+      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
         credentials: 'include'
       });
 
+      console.log('📊 Response status:', res.status, res.statusText);
+
       if (!res.ok) {
         const err = await res.json().catch(() => null);
         const msg = (err && err.message) || 'Đăng nhập thất bại. Vui lòng kiểm tra thông tin.';
+        console.error('❌ Login failed:', { status: res.status, error: err });
         setToast({ visible: true, message: msg, type: 'error' });
         return;
       }
 
-      // on success redirect to home
-      window.location.href = '/';
+      // LẤY DỮ LIỆU TỪ RESPONSE
+      const data = await res.json();
+      console.log('✅ Login response:', data);
+      
+      // LƯU TOKEN VÀO LOCALSTORAGE (chú ý: key là lowercase từ .NET)
+      if (data.accessToken) {
+        saveAccessToken(data.accessToken);
+        console.log('💾 AccessToken đã lưu vào localStorage');
+        console.log('Token length:', data.accessToken.length);
+      } else {
+        console.warn('⚠️ Không tìm thấy accessToken trong response');
+      }
+      
+      if (data.refreshToken) {
+        localStorage.setItem('refreshToken', data.refreshToken);
+        console.log('💾 RefreshToken đã lưu');
+      }
+      
+      if (data.user) {
+        localStorage.setItem('user', JSON.stringify(data.user));
+        console.log('💾 User info đã lưu:', data.user.email);
+      }
+
+      // Kiểm tra localStorage
+      const savedToken = localStorage.getItem('accessToken');
+      console.log('🔍 Verify token trong localStorage:', savedToken ? 'Có ✅' : 'Không ❌');
+
+      // on success redirect to dashboard
+      console.log('🚀 Đang chuyển hướng tới /dashboard...');
+      navigate('/dashboard');
+      console.log('✅ Navigate hoàn thành');
     } catch (error) {
-      setToast({ visible: true, message: 'Không thể kết nối đến máy chủ', type: 'error' });
+      console.error('💥 Lỗi catch:', error);
+      setToast({ visible: true, message: 'Không thể kết nối đến máy chủ: ' + error.message, type: 'error' });
     }
   };
 

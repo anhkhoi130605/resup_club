@@ -41,8 +41,9 @@ public partial class User : BaseEntity
 
 	public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
-	public virtual Role Role { get; set; } = null!;
-	public StudentCodeEnum StudentId { get; set; }
+    public virtual Role Role { get; set; } = null!;
+	// Store full student id like DE123456 as string
+	public string StudentId { get; set; } = string.Empty;
 
 	public Gender? Gender { get; set; }
 

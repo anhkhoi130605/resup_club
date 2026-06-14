@@ -1,14 +1,16 @@
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5191';
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://localhost:7176';
 
-export async function getHello() {
-  try {
-    const response = await fetch(`${BASE_URL}/api/hello`, { method: 'GET' });
-    if (!response.ok) throw new Error('Network response was not ok');
-    return response.json();
-  } catch (error) {
-    return {
-      message:
-        'Không tìm thấy endpoint /api/hello. Hãy kiểm tra backend hoặc đổi sang endpoint API phù hợp.',
-    };
+// HELPER FUNCTION: Thêm Authorization header với token
+function getAuthHeaders() {
+  const token = localStorage.getItem('accessToken');
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
   }
+  return headers;
 }
+
+
+

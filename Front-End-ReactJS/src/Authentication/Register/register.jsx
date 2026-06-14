@@ -1,29 +1,57 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './register.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5191';
+
 export default function Register() {
+  const navigate = useNavigate();
   const [fullname, setFullname] = useState('');
   const [studentId, setStudentId] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirm) {
       alert('Mật khẩu và xác nhận mật khẩu không khớp');
       return;
     }
 
-    const payload = { fullname, studentId, email, password };
-    // TODO: call backend register endpoint
-    console.log('Register payload:', payload);
+    const payload = {
+      FullName: fullname,
+      StudentId: studentId,
+      Email: email,
+      Password: password,
+      ConfirmPassword: confirm,
+    };
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => null);
+        const msg = (err && (err.message || err.title)) || 'Đăng ký thất bại. Vui lòng thử lại.';
+        alert(msg);
+        return;
+      }
+
+      await res.json();
+      navigate('/dashboard');
+    } catch (error) {
+      alert('Không thể kết nối đến máy chủ. Vui lòng thử lại sau.');
+    }
   };
 
   const handleGoogleRegister = () => {
     // Redirect to backend Google OAuth endpoint (backend will handle register/login)
-    window.location.href = 'https://localhost:7176/api/auth/login-google';
+    window.location.href = `${API_BASE_URL}/api/auth/register-google`;
   };
 
   return (

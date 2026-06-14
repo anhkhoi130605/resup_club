@@ -6,35 +6,36 @@ using Microsoft.AspNetCore.Mvc;
 using ResUpClub.Application.DTOs.Authentication;
 using ResUpClub.Application.Features.Authentication.Login;
 using ResUpClub.Application.Features.Authentication.Login.Handler;
+using ResUpClub.Application.DTOs.Authentication.Register;
+using ResUpClub.Application.Features.Authentication.Register.Handler;
 
 namespace ResUpClub.API.Controller;
 
 [ApiController]
 [Route("api/auth")]
-public class LoginController : ControllerBase
+public class RegisterController : ControllerBase
 {
 	private readonly IMediator _mediator;
 
-	public LoginController(IMediator mediator)
+	public RegisterController(IMediator mediator)
 	{
 		_mediator = mediator;
 	}
 
 	// 1. Khi Frontend click, trình duyệt sẽ nhảy vào đây đầu tiên
-	[HttpGet("login-google")]
-	public IActionResult LoginGoogle()
+	[HttpGet("register-google")]
+	public IActionResult RegisterGoogle()
 	{
 		// Sau khi Google quét vân tay xong, nó sẽ bắt trình duyệt quay lại endpoint "google-response" ở dưới
-        // Use a fixed redirect URI that matches the controller action route.
-		// This avoids ambiguity when multiple controllers expose actions named "GoogleResponse".
-		var properties = new AuthenticationProperties { RedirectUri = "/api/auth/google-login-response" };
+        // Use explicit redirect path for register flow
+		var properties = new AuthenticationProperties { RedirectUri = "/api/auth/google-register-response" };
 
 		// Lệnh Challenge này sẽ tự động sinh link Google và trả về mã 302 Redirect để trình duyệt tự nhảy sang Google
 		return Challenge(properties, GoogleDefaults.AuthenticationScheme);
 	}
 
 	// 2. Nơi xử lý ngầm sau khi người dùng chọn tài khoản Gmail thành công
-    [HttpGet("google-login-response")]
+    [HttpGet("google-register-response")]
 	public async Task<IActionResult> GoogleResponse()
 	{
 		// 1. Hứng lấy thông tin từ Cookie trung gian của Google
@@ -56,16 +57,23 @@ public class LoginController : ControllerBase
 
 		return Redirect(reactFrontendUrl);
 	}
-	[HttpPost("login")]
-	public async Task<IActionResult> Login([FromBody] LoginRequestDTO request)
+    [HttpPost("register")]
+	public async Task<IActionResult> Register([FromBody] RegisterUserRequestDTO request)
 	{
 		if (!ModelState.IsValid) return BadRequest(ModelState);
 
 		// 1. Gói dữ liệu vào Command và bắn qua MediatR xuống tầng Application xử lý
-		var command = new LoginCommand(request);
-		var loginResult = await _mediator.Send(command); // Trả về LoginResponseDTO
-
-		// 2. Trả thẳng cục dữ liệu JSON về cho Axios của React nhận lấy
-		return Ok(loginResult);
+		var command = new RegisterCommand(request);
+		try
+		{
+			var registerResult = await _mediator.Send(command);
+			// 2. Trả thẳng cục dữ liệu JSON về cho Axios của React nhận lấy
+			return Ok(registerResult);
+		}
+		catch (Exception ex)
+		{
+			// Trả về BadRequest để client biết lý do (ví dụ: email hoặc mã sinh viên đã tồn tại)
+			return BadRequest(new { StatusCode = 400, Message = ex.Message, Detail = ex.InnerException?.Message });
+		}
 	}
 }
