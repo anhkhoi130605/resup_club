@@ -36,7 +36,7 @@ namespace ResUpClub.API
 			{
 				options.AddPolicy("AllowReactDev", policy =>
 				{
-					policy.WithOrigins("https://localhost:5173")
+					policy.WithOrigins("http://localhost:5173","https://localhost:5173")
 						.AllowAnyHeader()
 						.AllowAnyMethod()
 						.AllowCredentials(); // Bắt buộc phải có thằng này!
@@ -46,8 +46,9 @@ namespace ResUpClub.API
 		// 5. Nạp toàn bộ cấu hình hạ tầng (JWT, Google Auth, Redis, Mail, Repositories...)
 			builder.Services.AddInfrastructureServices(builder.Configuration);
 
-		// 6. Đăng ký MediatR: quét các handlers trong assembly Application
-		builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(ResUpClub.Application.Features.Authentication.Login.Handler.RegisterCommandHandler).Assembly));
+			// 6. Đăng ký MediatR: quét các handlers trong assembly Application
+			builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(ResUpClub.Application.Features.Authentication.Register.Handler.RegisterCommandHandler).Assembly));
+			builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(ResUpClub.Application.Features.Authentication.Login.Handler.LoginCommandHandler).Assembly));
 
 			var app = builder.Build();
 
@@ -63,11 +64,13 @@ namespace ResUpClub.API
 				app.MapOpenApi();
 			}
 
-			app.UseHttpsRedirection();
+			// CORS PHẢI CHẠY SỚM (trước UseHttpsRedirection)
+			app.UseCors("AllowReactDev");
+
+			//app.UseHttpsRedirection();
 
 			// Định tuyến và lọc tên miền
 			app.UseRouting();
-			app.UseCors("AllowReactDev");
 
 			// Kiểm tra danh tính và phân quyền (Auth luôn chạy sau CORS và trước Map)
 			app.UseAuthentication();
