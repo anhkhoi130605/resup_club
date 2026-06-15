@@ -1,11 +1,10 @@
-﻿using BusinessLogic.DTOs;
-using BusinessLogic.Helper;
-using BusinessLogic.Service.System;
-using BusinessLogic.Service.UserActivities;
-using DataAccess.Enum;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using ResUpClub.API.Middlewares.Extentions;
+using ResUpClub.Application.Interfaces.ManageDataSystem;
+using ResUpClub.Domain.Enums;
+using static ResUpClub.Domain.Enums.UserEnum;
 
 namespace AEMS_Solution.Controllers.Common
 {
@@ -15,21 +14,21 @@ namespace AEMS_Solution.Controllers.Common
 	/// </summary>
 	public class BaseController : Controller
 	{
-		private IUserActivityLogService? _userActivityLogService;
-		private ISystemErrorLogService? _systemErrorLogService;
-		private INotificationService? _notificationService;
+		private IUserActivityLog? _userActivityLog;
+		private ISystemErrorLog? _systemErrorLog;
+		private INotification? _notification;
 
 		protected string? CurrentUserId => User.GetUserId();
 
 		// Lazy properties using Service Locator pattern for convenience in all controllers
-		protected IUserActivityLogService UserActivityLogService =>
-			_userActivityLogService ??= HttpContext.RequestServices.GetRequiredService<IUserActivityLogService>();
+		protected IUserActivityLog UserActivityLogService =>
+			_userActivityLog ??= HttpContext.RequestServices.GetRequiredService<IUserActivityLog>();
 
-		protected ISystemErrorLogService SystemErrorLogService =>
-			_systemErrorLogService ??= HttpContext.RequestServices.GetRequiredService<ISystemErrorLogService>();
+		protected ISystemErrorLog SystemErrorLogService =>
+			_systemErrorLog ??= HttpContext.RequestServices.GetRequiredService<ISystemErrorLog>();
 
-		protected INotificationService NotificationService =>
-			_notificationService ??= HttpContext.RequestServices.GetRequiredService<INotificationService>();
+		protected INotification NotificationService =>
+			_notification ??= HttpContext.RequestServices.GetRequiredService<INotification>();
 
 		#region User Notifications (TempData/Toasts)
 		protected void SetNotification(string message, string type = "success")
@@ -48,7 +47,7 @@ namespace AEMS_Solution.Controllers.Common
 		/// <summary>
 		/// Handles a successful operation: logs activity, sends a system notification, and sets UI success message.
 		/// </summary>
-		protected async Task ExecuteSuccessAsync(string message, UserActionType actionType, string? targetId = null, TargetType targetType = TargetType.None, string? notifyRecipient = null)
+		protected async Task ExecuteSuccessAsync(string message, UserActionEnum actionType, string? targetId = null, TargetType targetType = TargetType.None, string? notifyRecipient = null)
 		{
 			SetSuccess(message);
 			await LogUserActivity(actionType, targetId, targetType, message);
@@ -73,7 +72,7 @@ namespace AEMS_Solution.Controllers.Common
 		/// <summary>
 		/// Logs a user activity (e.g., Created Event, Updated Profile).
 		/// </summary>
-		protected async Task LogUserActivity(UserActionType actionType, string? targetId = null, TargetType targetType = TargetType.None, string? description = null)
+		protected async Task LogUserActivity(UserActionEnum actionType, string? targetId = null, TargetType targetType = TargetType.None, string? description = null)
 		{
 			if (string.IsNullOrEmpty(CurrentUserId)) return;
 			await UserActivityLogService.LogActivityAsync(CurrentUserId, actionType, targetId, targetType, description);
@@ -90,7 +89,7 @@ namespace AEMS_Solution.Controllers.Common
 		/// <summary>
 		/// Sends a persistent system-wide notification (Database + Real-time).
 		/// </summary>
-		protected async Task SendSystemNotification(string userId, string message, NotificationType type = NotificationType.SystemBroadcast, string? relatedId = null)
+		protected async Task SendSystemNotification(string userId, string message, NotificationEnum type = NotificationEnum.SystemBroadcast, string? relatedId = null)
 		{
 			await NotificationService.SendNotificationAsync(new SendNotificationRequest
 			{
