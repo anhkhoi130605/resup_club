@@ -53,7 +53,7 @@ public class RegisterController : ControllerBase
 
 		// 4. ĐIỀU HƯỚNG QUAY LẠI REACT: Đính Token lên URL để React bắt lấy
 		// (Bạn có thể đính thêm tên user, avatar nếu muốn, hoặc chỉ cần AccessToken là đủ)
-		var reactFrontendUrl = $"http://localhost:5173/login-success?token={loginResult.AccessToken}";
+		var reactFrontendUrl = $"httsp://localhost:5173/login-success?token={loginResult.AccessToken}";
 
 		return Redirect(reactFrontendUrl);
 	}
