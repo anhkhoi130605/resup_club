@@ -17,7 +17,6 @@ export function Header() {
           <Link to="/" className="nav-item">Home</Link>
           <Link to="/about" className="nav-item">About</Link>
           <Link to="/events" className="nav-item">Events</Link>
-            <Link to="/dashboard" className="nav-item">Dashboard</Link>
             <Link to="/contact" className="nav-item">Contact</Link>
             <Link to="/register" className="nav-item" style={{ textDecoration: 'none' }}>
               Register
