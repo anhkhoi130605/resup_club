@@ -1,106 +1,109 @@
-﻿using BusinessLogic.DTOs;
-using BusinessLogic.Helper;
-using BusinessLogic.Service.System;
-using BusinessLogic.Service.UserActivities;
-using DataAccess.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using ResUpClub.API.Middlewares.Extentions;
+using ResUpClub.Application.DTOs.Notification;
+using ResUpClub.Application.Interfaces.Logging;
+using ResUpClub.Application.Interfaces.Notifications;
+using ResUpClub.Domain.Enums;
 
-namespace AEMS_Solution.Controllers.Common
+namespace ResUpClub.API.Controller.Common
 {
-	/// <summary>
-	/// Base Controller providing global access to Logging and Notifications 
-	/// without requiring constructor injection in derived classes.
-	/// </summary>
-	public class BaseController : Controller
-	{
-		private IUserActivityLogService? _userActivityLogService;
-		private ISystemErrorLogService? _systemErrorLogService;
-		private INotificationService? _notificationService;
+    /// <summary>
+    /// Base Controller cung cấp Logging và Notification cho tất cả các controller con,
+    /// không cần inject qua constructor.
+    /// </summary>
+    [ApiController]
+    public class BaseController : ControllerBase
+    {
+        private IUserActivityLogService? _userActivityLogService;
+        private ISystemErrorLogService? _systemErrorLogService;
+        private INotificationService? _notificationService;
 
-		protected string? CurrentUserId => User.GetUserId();
+        protected string? CurrentUserId => User.GetUserId();
 
-		// Lazy properties using Service Locator pattern for convenience in all controllers
-		protected IUserActivityLogService UserActivityLogService =>
-			_userActivityLogService ??= HttpContext.RequestServices.GetRequiredService<IUserActivityLogService>();
+        // Lazy properties — resolve từ DI container khi cần, tránh inject thừa ở từng controller con
+        protected IUserActivityLogService UserActivityLogService =>
+            _userActivityLogService ??= HttpContext.RequestServices.GetRequiredService<IUserActivityLogService>();
 
-		protected ISystemErrorLogService SystemErrorLogService =>
-			_systemErrorLogService ??= HttpContext.RequestServices.GetRequiredService<ISystemErrorLogService>();
+        protected ISystemErrorLogService SystemErrorLogService =>
+            _systemErrorLogService ??= HttpContext.RequestServices.GetRequiredService<ISystemErrorLogService>();
 
-		protected INotificationService NotificationService =>
-			_notificationService ??= HttpContext.RequestServices.GetRequiredService<INotificationService>();
+        protected INotificationService NotificationService =>
+            _notificationService ??= HttpContext.RequestServices.GetRequiredService<INotificationService>();
 
-		#region User Notifications (TempData/Toasts)
-		protected void SetNotification(string message, string type = "success")
-		{
-			TempData["NotificationMessage"] = message;
-			TempData["NotificationType"] = type; // success, error, warning, info
-		}
+        #region Global Unified Helpers (Activity Log + Toast + Notification)
 
-		protected void SetSuccess(string message) => SetNotification(message, "success");
-		protected void SetError(string message) => SetNotification(message, "error");
-		protected void SetWarning(string message) => SetNotification(message, "warning");
-		protected void SetInfo(string message) => SetNotification(message, "info");
-		#endregion
+        /// <summary>
+        /// Xử lý thành công: ghi log hoạt động và gửi thông báo cho người dùng hiện tại.
+        /// </summary>
+        protected async Task ExecuteSuccessAsync(
+            string message,
+            UserActionType actionType,
+            string? targetId = null,
+            TargetType targetType = TargetType.None,
+            string? notifyRecipient = null)
+        {
+            await LogUserActivity(actionType, targetId, targetType, message);
 
-		#region Global Unified Helpers (Unified Activity + Toast + Notification)
-		/// <summary>
-		/// Handles a successful operation: logs activity, sends a system notification, and sets UI success message.
-		/// </summary>
-		protected async Task ExecuteSuccessAsync(string message, UserActionType actionType, string? targetId = null, TargetType targetType = TargetType.None, string? notifyRecipient = null)
-		{
-			SetSuccess(message);
-			await LogUserActivity(actionType, targetId, targetType, message);
-			var recipient = notifyRecipient ?? CurrentUserId;
-			if (!string.IsNullOrEmpty(recipient))
-			{
-				await SendSystemNotification(recipient, message);
-			}
-		}
+            var recipient = notifyRecipient ?? CurrentUserId;
+            if (!string.IsNullOrEmpty(recipient))
+            {
+                await SendSystemNotification(recipient, message);
+            }
+        }
 
-		/// <summary>
-		/// Handles an error: logs system exception and sets UI error message.
-		/// </summary>
-		protected async Task ExecuteErrorAsync(Exception ex, string? uiMessage = null)
-		{
-			SetError(uiMessage ?? "Đã xảy ra lỗi không mong đợi.");
-			await LogSystemError(ex, uiMessage);
-		}
-		#endregion
+        /// <summary>
+        /// Xử lý lỗi: ghi log exception vào hệ thống.
+        /// </summary>
+        protected async Task ExecuteErrorAsync(Exception ex, string? customMessage = null)
+        {
+            await LogSystemError(ex, customMessage);
+        }
 
-		#region Global Logging Helpers (Original)
-		/// <summary>
-		/// Logs a user activity (e.g., Created Event, Updated Profile).
-		/// </summary>
-		protected async Task LogUserActivity(UserActionType actionType, string? targetId = null, TargetType targetType = TargetType.None, string? description = null)
-		{
-			if (string.IsNullOrEmpty(CurrentUserId)) return;
-			await UserActivityLogService.LogActivityAsync(CurrentUserId, actionType, targetId, targetType, description);
-		}
+        #endregion
 
-		/// <summary>
-		/// Logs a system error with correlation to the current user if available.
-		/// </summary>
-		protected async Task LogSystemError(Exception ex, string? customMessage = null)
-		{
-			await SystemErrorLogService.LogErrorAsync(ex, customMessage, CurrentUserId);
-		}
+        #region Logging Helpers
 
-		/// <summary>
-		/// Sends a persistent system-wide notification (Database + Real-time).
-		/// </summary>
-		protected async Task SendSystemNotification(string userId, string message, NotificationType type = NotificationType.SystemBroadcast, string? relatedId = null)
-		{
-			await NotificationService.SendNotificationAsync(new SendNotificationRequest
-			{
-				ReceiverId = userId,
-				Title = "Hệ thống thông báo",
-				Message = message,
-				Type = type,
-				RelatedEntityId = relatedId
-			});
-		}
-		#endregion
-	}
+        /// <summary>
+        /// Ghi lại hành động của người dùng (vd: tạo event, cập nhật profile).
+        /// </summary>
+        protected async Task LogUserActivity(
+            UserActionType actionType,
+            string? targetId = null,
+            TargetType targetType = TargetType.None,
+            string? description = null)
+        {
+            if (string.IsNullOrEmpty(CurrentUserId)) return;
+            await UserActivityLogService.LogActivityAsync(CurrentUserId, actionType, targetId, targetType, description);
+        }
+
+        /// <summary>
+        /// Ghi lại lỗi hệ thống với thông tin người dùng hiện tại nếu có.
+        /// </summary>
+        protected async Task LogSystemError(Exception ex, string? customMessage = null)
+        {
+            await SystemErrorLogService.LogErrorAsync(ex, customMessage, CurrentUserId);
+        }
+
+        /// <summary>
+        /// Gửi thông báo persistent vào DB và real-time.
+        /// </summary>
+        protected async Task SendSystemNotification(
+            string userId,
+            string message,
+            NotificationType type = NotificationType.SystemBroadcast,
+            string? relatedId = null)
+        {
+            await NotificationService.SendNotificationAsync(new SendNotificationRequest
+            {
+                ReceiverId = userId,
+                Title = "Hệ thống thông báo",
+                Message = message,
+                Type = type,
+                RelatedEntityId = relatedId
+            });
+        }
+
+        #endregion
+    }
 }
