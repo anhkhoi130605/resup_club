@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ResUpClub.Application.Features.Admin.Create.QueriesAdminCreate
+namespace ResUpClub.Application.Features.Admin.ManageUser.Create.QueriesAdminCreate
 {
 	internal class AdminCreateQuery
 	{

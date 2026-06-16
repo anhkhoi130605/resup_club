@@ -6,7 +6,7 @@ using ResUpClub.Application.Interfaces.ManageTrancsaction;
 using ResUpClub.Domain.Entities.AboutUser;
 using static ResUpClub.Domain.Enums.UserEnum;
 
-namespace ResUpClub.Application.Features.Admin.Create.CommandAdminCreate
+namespace ResUpClub.Application.Features.Admin.ManageUser.Create.CommandAdminCreate
 {
 	public class AdminCreateCommandHandler : IRequestHandler<AdminCreateCommand, AdminDTO>
 	{

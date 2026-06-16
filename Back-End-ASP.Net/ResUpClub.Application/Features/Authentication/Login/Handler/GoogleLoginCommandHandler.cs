@@ -16,12 +16,13 @@ namespace ResUpClub.Application.Features.Authentication.Login.Handler
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IJWTTokenGenerator _jwtTokenGenerator;
-
-        public GoogleLoginCommandHandler(IUnitOfWork unitOfWork, IJWTTokenGenerator jwtTokenGenerator)
+        private readonly IPasswordHasher _passwordHasher;
+        public GoogleLoginCommandHandler(IUnitOfWork unitOfWork, IJWTTokenGenerator jwtTokenGenerator, IPasswordHasher passwordHasher)
         {
             _unitOfWork = unitOfWork;
             _jwtTokenGenerator = jwtTokenGenerator;
-        }
+            _passwordHasher = passwordHasher;
+		}
 
         public async Task<LoginResponseDTO> Handle(GoogleLoginCommand request, CancellationToken cancellationToken)
         {
@@ -46,11 +47,14 @@ namespace ResUpClub.Application.Features.Authentication.Login.Handler
                     await _unitOfWork.SaveChangesAsync();
                 }
 
+                // Generate a temporary random password so the user can log in later with email/password if needed.
+                var temporaryPassword = Guid.NewGuid().ToString("N").Substring(0, 12);
+
                 user = new User
                 {
                     Email = email,
                     FullName = principal.FindFirst(ClaimTypes.Name)?.Value ?? string.Empty,
-                    PasswordHash = null,
+                    PasswordHash = _passwordHasher.HashPassword(temporaryPassword),
                     RoleId = roleEntity.Id,
                     Role = roleEntity,
                     StudentId = string.Empty,

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ResUpClub.Application.Features.Admin.Create.CommandAdminCreate
+namespace ResUpClub.Application.Features.Admin.ManageUser.Create.CommandAdminCreate
 {
 	internal class AdminCreateValidation
 	{
