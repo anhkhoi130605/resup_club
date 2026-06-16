@@ -32,5 +32,21 @@ namespace ResUpClub.Domain.Enums
 		  DE,
 		  DS
 		}
+		public enum RoleInClublEnum{
+		    President,
+			VicePresident,
+			Member,
+			Leader
+		}
+		public enum RoleOutClubEnum
+		{
+		   Student,
+		   Teacher
+		}
+		public enum RoleSupportClubEnum
+		{
+			Mentor,
+			Manager
+		}
 	}
 }
