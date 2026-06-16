@@ -40,15 +40,5 @@ namespace ResUpClub.Domain.Enums
         Other
     }
 
-    public enum TargetType
-    {
-        None,
-        User,
-        Club,
-        Event,
-        Post,
-        File,
-        Comment,
-        Notification
-    }
+   
 }
