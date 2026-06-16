@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Data;
 using Microsoft.EntityFrameworkCore.Storage;
 using ResUpClub.Domain.Entities.Config;
@@ -7,6 +7,7 @@ using ResUpClub.Domain.Entities.FeedBack;
 using ResUpClub.Domain.Entities.Information;
 using ResUpClub.Domain.Entities.RoomIformation;
 using ResUpClub.Domain.Entities.AboutUser;
+using ResUpClub.Domain.Entities.Config;
 
 namespace ResUpClub.Application.Interfaces.ManageTrancsaction
 {

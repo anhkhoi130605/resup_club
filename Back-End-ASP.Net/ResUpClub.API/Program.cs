@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 using ResUpClub.Infrastructure.ConfigModel;
 using ResUpClub.Infrastructure.Persistence;
 using ResUpClub.Infrastructure;
@@ -62,6 +63,11 @@ namespace ResUpClub.API
 			if (app.Environment.IsDevelopment())
 			{
 				app.MapOpenApi();
+				app.MapScalarApiReference(options =>
+				{
+					options.Title = "ResUp Club API";
+					options.DefaultHttpClient = new(ScalarTarget.JavaScript, ScalarClient.Fetch);
+				});
 			}
 
 			// CORS PHẢI CHẠY SỚM (trước UseHttpsRedirection)

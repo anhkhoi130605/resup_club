@@ -6,10 +6,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using ResUpClub.Application.Interfaces.Authentication;
+using ResUpClub.Application.Interfaces.Logging;
 using ResUpClub.Application.Interfaces.ManageTrancsaction;
+using ResUpClub.Application.Interfaces.Notifications;
 using ResUpClub.Application.Interfaces.Storage;
 using ResUpClub.Application.Interfaces; // IEmailService
 using ResUpClub.Infrastructure.Services; // SmtpEmailService
+using ResUpClub.Infrastructure.Services.Logging;
+using ResUpClub.Infrastructure.Services.Notification;
 using ResUpClub.Domain.ConfigModel;
 using ResUpClub.Infrastructure.Authentication;
 using ResUpClub.Infrastructure.Persistence.Configurations.AuthenticationConfig;
@@ -40,6 +44,9 @@ public static class DependencyInjection
 		services.AddScoped<IJWTTokenGenerator, JWTTokenGenerator>();
 		services.AddScoped<IEmailService, SmtpEmailService>();
 		services.AddScoped<IStorageService, CloudinaryStorageService>();
+		services.AddScoped<IUserActivityLogService, UserActivityLogService>();
+		services.AddScoped<ISystemErrorLogService, SystemErrorLogService>();
+		services.AddScoped<INotificationService, NotificationService>();
 
 		// 3. Configure Redis Cache
 		var redisSettings = configuration.GetSection("Redis").Get<RedisSettings>();
