@@ -1,18 +1,16 @@
 stages:
   - build
 
-# Thiết lập chung cho tất cả các job để đảm bảo Runner luôn ở đúng thư mục
-before_script:
-  - echo "--- Thiết lập môi trường ---"
-
 build_frontend:
   stage: build
   tags:
     - windows
   script:
-    - echo "--- Bắt đầu Build Frontend ---"
-    # Dùng đường dẫn đầy đủ từ thư mục gốc của project mà Runner đã clone
-    - Set-Location -Path "Front-End-ReactJS"
+    - echo "--- Bat dau Build Frontend ---"
+    # Dùng đường dẫn đầy đủ tuyệt đối từ thư mục gốc của project
+    # Thay vì 'cd', hãy gọi trực tiếp lệnh npm trong thư mục đích bằng cách dùng chuỗi đường dẫn
+    - $frontendDir = Join-Path -Path $env:CI_PROJECT_DIR -ChildPath "Front-End-ReactJS"
+    - Set-Location -Path $frontendDir
     - npm install
     - npm run build
 
@@ -21,6 +19,7 @@ build_backend:
   tags:
     - windows
   script:
-    - echo "--- Bắt đầu Build Backend ---"
-    - Set-Location -Path "Back-End-ASP.Net/ResUpClub.API"
+    - echo "--- Bat dau Build Backend ---"
+    - $backendDir = Join-Path -Path $env:CI_PROJECT_DIR -ChildPath "Back-End-ASP.Net/ResUpClub.API"
+    - Set-Location -Path $backendDir
     - dotnet build "ResUpClubWebAPI.sln" --configuration Release
