@@ -4,10 +4,10 @@ stages:
 build_frontend:
   stage: build
   tags:
-    - windows 
+    - windows  
   script:
     - cd Front-End-ReactJS
-    - npm install    
+    - npm install 
     - npm run build
   rules:
     - changes:
