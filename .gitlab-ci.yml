@@ -1,0 +1,6 @@
+check_code:
+  stage: test
+  script:
+    - echo "Khoi-dep-zai is checking the code"
+  tags:
+    - windows
