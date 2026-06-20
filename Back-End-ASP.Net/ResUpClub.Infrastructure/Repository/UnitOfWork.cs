@@ -48,19 +48,19 @@ namespace ResUpClub.Infrastructure.Repository
 			Tickets = new GenericRepository<Ticket>(_ctx);
 		}
 
-		public Task<int> SaveChangesAsync()
+		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
-			return _ctx.SaveChangesAsync();
+			return _ctx.SaveChangesAsync(cancellationToken);
 		}
 
-		public Task<IDbContextTransaction> BeginTransactionAsync()
+		public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
 		{
-			return _ctx.Database.BeginTransactionAsync();
+			return _ctx.Database.BeginTransactionAsync(cancellationToken);
 		}
 
-		public Task<IDbContextTransaction> BeginTransactionAsync(IsolationLevel isolationLevel)
+		public Task<IDbContextTransaction> BeginTransactionAsync(IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
 		{
-			return _ctx.Database.BeginTransactionAsync(isolationLevel);
+			return _ctx.Database.BeginTransactionAsync(isolationLevel,cancellationToken);
 		}
 
 		public void Dispose()

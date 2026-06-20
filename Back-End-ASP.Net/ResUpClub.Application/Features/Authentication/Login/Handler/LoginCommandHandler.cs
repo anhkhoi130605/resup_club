@@ -15,12 +15,14 @@ namespace ResUpClub.Application.Features.Authentication.Login.Handler
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IJWTTokenGenerator _jwtTokenGenerator;
+		private readonly IPasswordHasher passwordHasher;
 
 		// 1. Inject UnitOfWork (quản lý DB) và JwtTokenGenerator (tầng Infrastructure) vào qua Constructor
-		public LoginCommandHandler(IUnitOfWork unitOfWork, IJWTTokenGenerator jwtTokenGenerator)
+		public LoginCommandHandler(IUnitOfWork unitOfWork, IJWTTokenGenerator jwtTokenGenerator, IPasswordHasher passwordHasher)
 		{
 			_unitOfWork = unitOfWork;
 			_jwtTokenGenerator = jwtTokenGenerator;
+			this.passwordHasher = passwordHasher;
 		}
 
 		// 2. Hàm Handle xử lý logic nghiệp vụ đăng nhập
@@ -31,7 +33,7 @@ namespace ResUpClub.Application.Features.Authentication.Login.Handler
 			var user = await _unitOfWork.User.FindByEmailAsync(request.Request.Email);
 
 			// Bước B: Kiểm tra mật khẩu (Đây là ví dụ kiểm tra thô, nếu bạn có mã hóa/hash thì gọi hàm verify ở đây)
-			if (user == null || user.PasswordHash != request.Request.Password)
+			if (user == null || !passwordHasher.VerifyPassword(request.Request.Password, user.PasswordHash))
 			{
 				throw new ArgumentException("Tài khoản hoặc mật khẩu không chính xác.");
 			}
