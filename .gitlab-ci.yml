@@ -18,8 +18,8 @@ build_backend:
   tags:
     - windows  
   script:
-    - cd Back-End-ASP.Net
-    - dotnet build
+    - cd Back-End-ASP.Net/ResUpClub.API
+    - dotnet build "ResUpClub.sln"
   rules:
     - changes:
         - Back-End-ASP.Net/**/*
