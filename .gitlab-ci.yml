@@ -50,8 +50,8 @@ build_frontend:
     - windows
   script:
     - echo "📦 Building React Frontend..."
-    # Dùng tuyệt chiêu --prefix đã cứu cánh chúng ta ở lỗi trước
-    - npm --prefix Front-End-ReactJS install
+    # Thêm cờ --legacy-peer-deps vào cuối lệnh install
+    - npm --prefix Front-End-ReactJS install --legacy-peer-deps
     - npm run build --prefix Front-End-ReactJS
   artifacts:
     paths:
