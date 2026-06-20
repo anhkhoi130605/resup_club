@@ -1,16 +1,18 @@
 stages:
   - build
 
+# Thiết lập chung cho tất cả các job để đảm bảo Runner luôn ở đúng thư mục
+before_script:
+  - echo "--- Thiết lập môi trường ---"
+
 build_frontend:
   stage: build
   tags:
     - windows
   script:
-    - echo "--- Checking directory ---"
-    - dir
-    - echo "--- Building Frontend ---"
-    # Kiểm tra xem thư mục có thực sự tồn tại ở đây không
-    - cd "Front-End-ReactJS"
+    - echo "--- Bắt đầu Build Frontend ---"
+    # Dùng đường dẫn đầy đủ từ thư mục gốc của project mà Runner đã clone
+    - Set-Location -Path "Front-End-ReactJS"
     - npm install
     - npm run build
 
@@ -19,8 +21,6 @@ build_backend:
   tags:
     - windows
   script:
-    - echo "--- Building Backend ---"
-    - cd "Back-End-ASP.Net/ResUpClub.API"
-    # Sử dụng lệnh dir để xem file .sln có thực sự ở đây không
-    - dir
+    - echo "--- Bắt đầu Build Backend ---"
+    - Set-Location -Path "Back-End-ASP.Net/ResUpClub.API"
     - dotnet build "ResUpClubWebAPI.sln" --configuration Release
