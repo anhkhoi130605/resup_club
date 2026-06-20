@@ -6,20 +6,15 @@ build_frontend:
   tags:
     - windows
   script:
-    - echo "--- Bat dau Build Frontend ---"
-    # Dùng đường dẫn đầy đủ tuyệt đối từ thư mục gốc của project
-    # Thay vì 'cd', hãy gọi trực tiếp lệnh npm trong thư mục đích bằng cách dùng chuỗi đường dẫn
-    - $frontendDir = Join-Path -Path $env:CI_PROJECT_DIR -ChildPath "Front-End-ReactJS"
-    - Set-Location -Path $frontendDir
-    - npm install
-    - npm run build
+    - echo "--- Ép npm chạy đúng thư mục ---"
+    - npm --prefix Front-End-ReactJS install
+    - npm run build --prefix Front-End-ReactJS
 
 build_backend:
   stage: build
   tags:
     - windows
   script:
-    - echo "--- Bat dau Build Backend ---"
-    - $backendDir = Join-Path -Path $env:CI_PROJECT_DIR -ChildPath "Back-End-ASP.Net/ResUpClub.API"
-    - Set-Location -Path $backendDir
+    - echo "--- Build Backend ---"
+    - cd Back-End-ASP.Net/ResUpClub.API
     - dotnet build "ResUpClubWebAPI.sln" --configuration Release
