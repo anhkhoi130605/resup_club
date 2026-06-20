@@ -1,5 +1,6 @@
 stages:
   - build
+
 default:
   tags:
     - windows
@@ -7,6 +8,7 @@ default:
 build_frontend:
   stage: build
   script:
+    - echo "Bat dau build frontend..."
     - cd Front-End-ReactJS
     - npm install
     - npm run build
@@ -17,9 +19,9 @@ build_frontend:
 build_backend:
   stage: build
   script:
+    - echo "Bat dau build backend..."
     - cd Back-End-ASP.Net
     - dotnet build
   rules:
     - changes:
         - Back-End-ASP.Net/**/*
-        
