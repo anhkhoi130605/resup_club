@@ -39,7 +39,7 @@ namespace ResUpClub.Application.Features.Authentication.Login.Handler
 			}
 
             // Bước C: Đúng tài khoản mật khẩu -> Gọi Service để sinh chuỗi ký số JWT Access Token
-			// IJWTTokenGenerator.GenerateToken expects (userId, email, roles)
+            // IJWTTokenGenerator now accepts string role names
 			var roles = new[] { user.Role?.RoleName.ToString() ?? string.Empty };
 			var accessToken = _jwtTokenGenerator.GenerateToken(user.Id, user.Email, roles);
 			var refreshToken = Guid.NewGuid().ToString(); // Sinh tạm một chuỗi ngẫu nhiên làm Refresh Token

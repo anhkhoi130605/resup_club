@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using ResUpClub.API.Middlewares.Extentions;
-using ResUpClub.Application.DTOs.Notification;
+using ResUpClub.Application.Features.SystemModule.Notification;
 using ResUpClub.Application.Interfaces.Logging;
 using ResUpClub.Application.Interfaces.Notifications;
 using ResUpClub.Domain.Enums;

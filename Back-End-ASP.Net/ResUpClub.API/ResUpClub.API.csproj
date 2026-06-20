@@ -24,4 +24,13 @@
     <ProjectReference Include="..\ResUpClub.Infrastructure\ResUpClub.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controller\RoleForUser\InClubController\AdminController\" />
+    <Folder Include="Controller\RoleForUser\InClubController\MemberController\LeaderController\" />
+    <Folder Include="Controller\RoleForUser\InClubController\MemberController\MemberController\" />
+    <Folder Include="Controller\RoleForUser\InClubController\MemberController\PresidentController\" />
+    <Folder Include="Controller\RoleForUser\OutClubController\StudentController\" />
+    <Folder Include="Controller\RoleForUser\OutClubController\SponsorController\" />
+  </ItemGroup>
+
 </Project>
