@@ -1,4 +1,4 @@
-using ResUpClub.Application.DTOs.Notification;
+using ResUpClub.Application.Features.SystemModule.Notification;
 using ResUpClub.Application.Interfaces.ManageTrancsaction;
 using ResUpClub.Application.Interfaces.Notifications;
 using NotificationEntity = ResUpClub.Domain.Entities.Config.Notification;
