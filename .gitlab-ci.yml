@@ -1,6 +1,6 @@
-check_code:
+test_job:
   stage: test
   script:
-    - echo "Khoi-dep-zai is checking the code"
+    - echo "Pipeline running on local machine"
   tags:
     - windows
