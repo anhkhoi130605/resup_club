@@ -2,6 +2,5 @@ check_code:
   stage: test
   script:
     - echo "Máy Khoi-dep-zai đang kiểm tra mã nguồn..."
-    - # Tại đây bạn có thể thêm các lệnh build hoặc test thực tế của dự án
   tags:
-    - windows # Bắt buộc phải để tag này để GitLab đẩy job về máy bạn
+    - windows 
