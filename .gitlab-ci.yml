@@ -1,12 +1,21 @@
+stages:
+  - build
+default:
+  tags:
+    - windows
+
 build_frontend:
+  stage: build
   script:
     - cd Front-End-ReactJS
+    - npm install
     - npm run build
   rules:
     - changes:
-        - Front-End-ReactJS/**/* 
+        - Front-End-ReactJS/**/*
 
 build_backend:
+  stage: build
   script:
     - cd Back-End-ASP.Net
     - dotnet build
