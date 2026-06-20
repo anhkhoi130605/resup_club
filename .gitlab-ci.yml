@@ -6,8 +6,11 @@ build_frontend:
   tags:
     - windows
   script:
-    - echo "--- Đang build Frontend ---"
-    - cd Front-End-ReactJS
+    - echo "--- Checking directory ---"
+    - dir
+    - echo "--- Building Frontend ---"
+    # Kiểm tra xem thư mục có thực sự tồn tại ở đây không
+    - cd "Front-End-ReactJS"
     - npm install
     - npm run build
 
@@ -16,7 +19,8 @@ build_backend:
   tags:
     - windows
   script:
-    - echo "--- Đang build Backend ---"
+    - echo "--- Building Backend ---"
     - cd "Back-End-ASP.Net/ResUpClub.API"
-    # Dùng đúng tên file .sln từ ảnh chụp màn hình của bạn
+    # Sử dụng lệnh dir để xem file .sln có thực sự ở đây không
+    - dir
     - dotnet build "ResUpClubWebAPI.sln" --configuration Release
