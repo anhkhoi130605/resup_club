@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Abp" Version="10.4.0" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
     <PackageReference Include="DocuSign.eSign.dll" Version="10.0.0" />
     <PackageReference Include="EcoCore" Version="7.2.0.17408" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.3.11" />

@@ -12,25 +12,27 @@ namespace ResUpClub.Application.Features.Authentication.Register.Handler;
 public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterResponse>
 {
 	private readonly IUnitOfWork _unitOfWork;
-	private readonly IJWTTokenGenerator _jwtTokenGenerator;
-
-	public RegisterCommandHandler(IUnitOfWork unitOfWork, IJWTTokenGenerator jwtTokenGenerator)
+    private readonly IJWTTokenGenerator _jwtTokenGenerator;
+	private readonly IPasswordHasher _passwordHasher;
+	public RegisterCommandHandler(IUnitOfWork unitOfWork, IJWTTokenGenerator jwtTokenGenerator, IPasswordHasher passwordHasher)
 	{
 		_unitOfWork = unitOfWork;
 		_jwtTokenGenerator = jwtTokenGenerator;
+		_passwordHasher = passwordHasher;
 	}
 
     public async Task<RegisterResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
 	{
         // 1. Lấy dữ liệu từ DTO
-		var dto = request.Request;
+        var dto = request.Request;
 		var email = dto.Email;
 		var name = dto.FullName;
-
 		if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(dto.Password))
 		{
 			throw new Exception("Email hoặc mật khẩu không hợp lệ.");
 		}
+
+		string securedPassword = _passwordHasher.HashPassword(dto.Password);
 
         // 2. Kiểm tra xem Email hoặc StudentId này đã được ai đăng ký trong DB chưa
 		var existingUser = await _unitOfWork.User.FindByEmailAsync(email);
@@ -61,7 +63,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterR
 		{
 			Email = email,
 			FullName = name ?? string.Empty,
-            PasswordHash = dto.Password, // store raw for now (replace with hash in production)
+            PasswordHash = securedPassword, // store raw for now (replace with hash in production)
 			RoleId = roleEntity.Id,
 			Role = roleEntity,
             // Store full student id string if provided

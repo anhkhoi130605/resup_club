@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Data;
 using Microsoft.EntityFrameworkCore.Storage;
 using ResUpClub.Domain.Entities.Config;
@@ -7,14 +7,15 @@ using ResUpClub.Domain.Entities.FeedBack;
 using ResUpClub.Domain.Entities.Information;
 using ResUpClub.Domain.Entities.RoomIformation;
 using ResUpClub.Domain.Entities.AboutUser;
+using ResUpClub.Domain.Entities.Config;
 
 namespace ResUpClub.Application.Interfaces.ManageTrancsaction
 {
     public interface IUnitOfWork : IDisposable
 	{
-		Task<int> SaveChangesAsync();
-		Task<IDbContextTransaction> BeginTransactionAsync();
-		Task<IDbContextTransaction> BeginTransactionAsync(IsolationLevel isolationLevel);
+		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+		Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
+		Task<IDbContextTransaction> BeginTransactionAsync(IsolationLevel isolationLevel, CancellationToken cancellationToken = default);
         IUserRepository User { get; }
 		IGenericRepository<Profile> Profile { get; }
 		IGenericRepository<Role> Roles { get; }

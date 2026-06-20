@@ -4,7 +4,16 @@ using System.Text;
 
 namespace ResUpClub.Domain.Enums
 {
-	internal class NotificationEm
-	{
-	}
+    public enum NotificationType
+    {
+        SystemBroadcast,
+        ClubActivity,
+        EventReminder,
+        JoinRequestApproved,
+        JoinRequestRejected,
+        NewPost,
+        MentionInComment,
+        AdminAlert,
+        Other
+    }
 }
