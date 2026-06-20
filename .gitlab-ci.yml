@@ -42,10 +42,12 @@ test_backend:
 # ============== FRONTEND BUILD ==============
 build_frontend:
   stage: build
-  image: node:20-alpine
   script:
     - echo "📦 Building React Frontend..."
+    - echo "Current dir: $PWD"
+    - dir
     - cd Front-End-ReactJS
+    - dir
     - npm install
     - npm run build
   artifacts:
@@ -62,10 +64,12 @@ build_frontend:
 # ============== FRONTEND TEST ==============
 test_frontend:
   stage: test
-  image: node:20-alpine
   script:
     - echo "🧪 Running Frontend Tests..."
+    - echo "Current dir: $PWD"
+    - dir
     - cd Front-End-ReactJS
+    - dir
     - npm install
     # Thêm test script vào package.json nếu có
     # - npm run test
