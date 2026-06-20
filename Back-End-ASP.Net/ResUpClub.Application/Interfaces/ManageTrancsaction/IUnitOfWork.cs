@@ -13,9 +13,9 @@ namespace ResUpClub.Application.Interfaces.ManageTrancsaction
 {
     public interface IUnitOfWork : IDisposable
 	{
-		Task<int> SaveChangesAsync();
-		Task<IDbContextTransaction> BeginTransactionAsync();
-		Task<IDbContextTransaction> BeginTransactionAsync(IsolationLevel isolationLevel);
+		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+		Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
+		Task<IDbContextTransaction> BeginTransactionAsync(IsolationLevel isolationLevel, CancellationToken cancellationToken = default);
         IUserRepository User { get; }
 		IGenericRepository<Profile> Profile { get; }
 		IGenericRepository<Role> Roles { get; }

@@ -1,4 +1,4 @@
-using ResUpClub.Application.DTOs.Notification;
+using ResUpClub.Application.Features.SystemModule.Notification;
 using ResUpClub.Domain.Enums;
 
 namespace ResUpClub.Application.Interfaces.Notifications

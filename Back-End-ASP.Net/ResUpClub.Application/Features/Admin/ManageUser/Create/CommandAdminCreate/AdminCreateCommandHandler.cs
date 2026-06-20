@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MediatR;
+﻿using MediatR;
 using ResUpClub.Application.Interfaces.ManageTrancsaction;
+using ResUpClub.Application.Interfaces.Authentication;
 using ResUpClub.Domain.Entities.AboutUser;
 using static ResUpClub.Domain.Enums.UserEnum;
 
 namespace ResUpClub.Application.Features.Admin.ManageUser.Create.CommandAdminCreate
 {
-	public class AdminCreateCommandHandler : IRequestHandler<AdminCreateCommand, AdminDTO>
+	public class AdminCreateCommandHandler : IRequestHandler<AdminCreateCommand, AdminCreateDTO>
 	{
-	    private readonly IUnitOfWork _unitOfWork;
-		public AdminCreateCommandHandler(IUnitOfWork unitOfWork)
-		{
-			_unitOfWork = unitOfWork;
-		}
-    public async Task<AdminDTO> Handle(AdminCreateCommand request, CancellationToken cancellationToken)
+    private readonly IUnitOfWork _unitOfWork;
+	private readonly IPasswordHasher _passwordHasher;
+	public AdminCreateCommandHandler(IUnitOfWork unitOfWork, IPasswordHasher passwordHasher)
+	{
+		_unitOfWork = unitOfWork;
+		_passwordHasher = passwordHasher;
+	}
+    public async Task<AdminCreateDTO> Handle(AdminCreateCommand request, CancellationToken cancellationToken)
 	{
 		// 1. Validate input and check existing email
 		if (string.IsNullOrWhiteSpace(request.Email))
@@ -25,40 +25,42 @@ namespace ResUpClub.Application.Features.Admin.ManageUser.Create.CommandAdminCre
 		if (exists)
 			throw new Exception("Tài khoản email này đã tồn tại trên hệ thống.");
 
-		// 2. Ensure default Role exists
-		var roleEntity = await _unitOfWork.Roles.GetAsync(r => r.RoleName == RoleEnum.User);
+
+		// 2. Ensure requested Role exists (create if missing)
+		var roleEntity = await _unitOfWork.Roles.GetAsync(r => r.RoleName == request.Role);
 		if (roleEntity == null)
 		{
-			roleEntity = new Role { RoleName = RoleEnum.User };
+			roleEntity = new Role { RoleName = request.Role };
 			await _unitOfWork.Roles.CreateAsync(roleEntity);
 			await _unitOfWork.SaveChangesAsync();
 		}
 
-		// 3. Create new user entity
-		var newUser = new User
+		// 3. Create new user entity (hash password)
+        var newUser = new User
 		{
 			Email = request.Email,
 			FullName = request.FullName,
-			PasswordHash = request.Password, // consider hashing in production
+			PasswordHash = _passwordHasher.HashPassword(request.Password),
 			RoleId = roleEntity.Id,
 			Role = roleEntity,
 			StudentId = string.Empty,
-			MemberInOrOutClub = MemberInOrOutClubEnum.OutClub
+			MemberInOrOutClub = (request.Role == RoleEnum.Admin) ? MemberInOrOutClubEnum.InClub : MemberInOrOutClubEnum.OutClub,
+			Gender = request.Gender
 		};
 
 		await _unitOfWork.User.CreateAsync(newUser);
 		await _unitOfWork.SaveChangesAsync();
 
-		// 4. Map to DTO and return
-		return new AdminDTO
+        // 4. Map to DTO and return
+		return new AdminCreateDTO
 		{
-			Id = Guid.Parse(newUser.Id),
 			Email = newUser.Email,
+			PasswordHash = newUser.PasswordHash,
 			FullName = newUser.FullName,
-			Role = roleEntity.RoleName ?? RoleEnum.User,
-			Roles = new List<string> { roleEntity.RoleName?.ToString() ?? RoleEnum.User.ToString() },
-			CreatedAt = DateTime.UtcNow,
-			Status = UserStatusEnum.Active
+			Role = roleEntity.RoleName ?? request.Role,
+			Status = UserStatusEnum.Active,
+			MemberInOrOutClub = newUser.MemberInOrOutClub,
+			Gender = newUser.Gender,
 		};
 	}
 	}
