@@ -1,6 +1,15 @@
-test_job:
-  stage: test
+build_frontend:
   script:
-    - echo "Pipeline running on local machine"
-  tags:
-    - windows
+    - cd Front-End-ReactJS
+    - npm run build
+  rules:
+    - changes:
+        - Front-End-ReactJS/**/* 
+
+build_backend:
+  script:
+    - cd Back-End-ASP.Net
+    - dotnet build
+  rules:
+    - changes:
+        - Back-End-ASP.Net/**/*
