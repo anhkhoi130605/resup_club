@@ -1,6 +1,25 @@
-check_code:
-  stage: test
-  script:
-    - echo "Khoi-dep-zai is checking the code"
+stages:
+  - build
+
+build_frontend:
+  stage: build
   tags:
-    - windows
+    - windows 
+  script:
+    - cd Front-End-ReactJS
+    - npm install    
+    - npm run build
+  rules:
+    - changes:
+        - Front-End-ReactJS/**/*
+
+build_backend:
+  stage: build
+  tags:
+    - windows  
+  script:
+    - cd Back-End-ASP.Net
+    - dotnet build
+  rules:
+    - changes:
+        - Back-End-ASP.Net/**/*
