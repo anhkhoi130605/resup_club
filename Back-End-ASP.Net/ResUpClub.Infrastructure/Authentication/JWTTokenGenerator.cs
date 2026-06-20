@@ -7,6 +7,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using ResUpClub.Infrastructure.Persistence.Configurations.AuthenticationConfig;
 using ResUpClub.Application.Interfaces.Authentication;
+using static ResUpClub.Domain.Enums.UserEnum;
 namespace ResUpClub.Infrastructure.Authentication
 {
 	public class JWTTokenGenerator : IJWTTokenGenerator
@@ -17,7 +18,7 @@ namespace ResUpClub.Infrastructure.Authentication
 	{
 		_jwtOptions = jwtOptions ?? throw new ArgumentNullException(nameof(jwtOptions));
 	}
-		public string GenerateToken(string userId, string email, IEnumerable<string> Role)
+		public string GenerateToken(string userId, string email, IEnumerable<RoleEnum> Role)
 		{
 			var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_jwtOptions.Key ?? string.Empty);
@@ -25,9 +26,10 @@ namespace ResUpClub.Infrastructure.Authentication
 			{
 				new Claim(JwtRegisteredClaimNames.Sub, userId),
 				new Claim(JwtRegisteredClaimNames.Email, email)
+				
 			};
 			// Thêm Roles vào Claims
-			claimList.AddRange(Role.Select(role => new Claim(ClaimTypes.Role, role)));
+			claimList.AddRange(Role.Select(role => new Claim(ClaimTypes.Role, role.ToString())));
 			var tokenDescriptor = new SecurityTokenDescriptor
 			{
 				Audience = _jwtOptions.Audience,
