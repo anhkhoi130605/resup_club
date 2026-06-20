@@ -1,25 +1,22 @@
 stages:
   - build
-  
-default:
-  tags:
-    - windows
 
 build_frontend:
   stage: build
+  tags:
+    - windows
   script:
+    - echo "--- Đang build Frontend ---"
     - cd Front-End-ReactJS
     - npm install
     - npm run build
-  only:
-    changes:
-      - Front-End-ReactJS/**/*
 
 build_backend:
   stage: build
+  tags:
+    - windows
   script:
-    - cd Back-End-ASP.Net/ResUpClub.API
-    - dotnet build "ResUpClub.sln" 
-  only:
-    changes:
-      - Back-End-ASP.Net/**/*
+    - echo "--- Đang build Backend ---"
+    - cd "Back-End-ASP.Net/ResUpClub.API"
+    # Dùng đúng tên file .sln từ ảnh chụp màn hình của bạn
+    - dotnet build "ResUpClubWebAPI.sln" --configuration Release
