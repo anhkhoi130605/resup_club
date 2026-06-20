@@ -1,0 +1,65 @@
+stages:
+  - build
+  - test
+  # Tạm thời tắt package và deploy cho đến khi máy bạn cài Docker và có server thật
+  # - package
+  # - deploy
+
+# ============== BACKEND BUILD ==============
+build_backend:
+  stage: build
+  tags:
+    - windows
+  script:
+    - echo "📦 Building .NET Backend..."
+    - cd Back-End-ASP.Net/ResUpClub.API
+    - dotnet restore "ResUpClubWebAPI.sln"
+    - dotnet build "ResUpClubWebAPI.sln" --configuration Release
+  artifacts:
+    paths:
+      - Back-End-ASP.Net/ResUpClub.API/bin/Release/
+    expire_in: 30 days
+  cache:
+    paths:
+      - Back-End-ASP.Net/**/bin/
+      - Back-End-ASP.Net/**/obj/
+  rules:
+    - changes:
+        - Back-End-ASP.Net/**/*
+
+# ============== BACKEND TEST ==============
+test_backend:
+  stage: test
+  tags:
+    - windows
+  script:
+    - echo "🧪 Running Backend Tests..."
+    - cd Back-End-ASP.Net/ResUpClub.API
+    # Thêm lệnh chạy test nếu bạn có viết Unit Test
+    # - dotnet test --no-build --verbosity normal
+  dependencies:
+    - build_backend
+  rules:
+    - changes:
+        - Back-End-ASP.Net/**/*
+
+# ============== FRONTEND BUILD ==============
+build_frontend:
+  stage: build
+  tags:
+    - windows
+  script:
+    - echo "📦 Building React Frontend..."
+    # Dùng tuyệt chiêu --prefix đã cứu cánh chúng ta ở lỗi trước
+    - npm --prefix Front-End-ReactJS install
+    - npm run build --prefix Front-End-ReactJS
+  artifacts:
+    paths:
+      - Front-End-ReactJS/dist/
+    expire_in: 30 days
+  cache:
+    paths:
+      - Front-End-ReactJS/node_modules/
+  rules:
+    - changes:
+        - Front-End-ReactJS/**/*
