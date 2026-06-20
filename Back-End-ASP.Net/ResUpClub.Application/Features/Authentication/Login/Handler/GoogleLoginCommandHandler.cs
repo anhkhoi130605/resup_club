@@ -66,7 +66,7 @@ namespace ResUpClub.Application.Features.Authentication.Login.Handler
             }
 
             var roleName = user.Role?.RoleName?.ToString() ?? RoleEnum.User.ToString();
-            var accessToken = _jwtTokenGenerator.GenerateToken(user.Id, user.Email, new List<string> { roleName });
+            var accessToken = _jwtTokenGenerator.GenerateToken(user.Id, user.Email, new List<string> { roleName});
 
             return new LoginResponseDTO
             {
