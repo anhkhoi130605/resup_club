@@ -1,6 +1,6 @@
 using ResUpClub.Domain.Enums;
 
-namespace ResUpClub.Application.Features.SystemModule.Notifications
+namespace ResUpClub.Application.Features.SystemModule.Notification
 {
     public class SendNotificationRequest
     {
