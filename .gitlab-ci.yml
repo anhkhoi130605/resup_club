@@ -1,6 +1,6 @@
 stages:
   - build
-
+  
 default:
   tags:
     - windows
@@ -8,20 +8,18 @@ default:
 build_frontend:
   stage: build
   script:
-    - echo "Bat dau build frontend..."
     - cd Front-End-ReactJS
     - npm install
     - npm run build
-  rules:
-    - changes:
-        - Front-End-ReactJS/**/*
+  only:
+    changes:
+      - Front-End-ReactJS/**/*
 
 build_backend:
   stage: build
   script:
-    - echo "Bat dau build backend..."
-    - cd Back-End-ASP.Net
-    - dotnet build
-  rules:
-    - changes:
-        - Back-End-ASP.Net/**/*
+    - cd Back-End-ASP.Net/ResUpClub.API
+    - dotnet build "ResUpClub.sln" 
+  only:
+    changes:
+      - Back-End-ASP.Net/**/*
