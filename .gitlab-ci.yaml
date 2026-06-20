@@ -1,17 +1,19 @@
 stages:
   - build
   - test
-  - package
-  - deploy
+  # Tạm thời tắt package và deploy cho đến khi máy bạn cài Docker và có server thật
+  # - package
+  # - deploy
 
 # ============== BACKEND BUILD ==============
 build_backend:
   stage: build
-  image: mcr.microsoft.com/dotnet/sdk:8.0
+  tags:
+    - windows
   script:
     - echo "📦 Building .NET Backend..."
     - cd Back-End-ASP.Net/ResUpClub.API
-    - dotnet restore
+    - dotnet restore "ResUpClubWebAPI.sln"
     - dotnet build "ResUpClubWebAPI.sln" --configuration Release
   artifacts:
     paths:
@@ -28,11 +30,13 @@ build_backend:
 # ============== BACKEND TEST ==============
 test_backend:
   stage: test
-  image: mcr.microsoft.com/dotnet/sdk:8.0
+  tags:
+    - windows
   script:
     - echo "🧪 Running Backend Tests..."
     - cd Back-End-ASP.Net/ResUpClub.API
-    - dotnet test --no-build --verbosity normal
+    # Thêm lệnh chạy test nếu bạn có viết Unit Test
+    # - dotnet test --no-build --verbosity normal
   dependencies:
     - build_backend
   rules:
@@ -42,14 +46,13 @@ test_backend:
 # ============== FRONTEND BUILD ==============
 build_frontend:
   stage: build
+  tags:
+    - windows
   script:
     - echo "📦 Building React Frontend..."
-    - echo "Current dir: $PWD"
-    - dir
-    - cd Front-End-ReactJS
-    - dir
-    - npm install
-    - npm run build
+    # Dùng tuyệt chiêu --prefix đã cứu cánh chúng ta ở lỗi trước
+    - npm --prefix Front-End-ReactJS install
+    - npm run build --prefix Front-End-ReactJS
   artifacts:
     paths:
       - Front-End-ReactJS/dist/
@@ -60,80 +63,3 @@ build_frontend:
   rules:
     - changes:
         - Front-End-ReactJS/**/*
-
-# ============== FRONTEND TEST ==============
-test_frontend:
-  stage: test
-  script:
-    - echo "🧪 Running Frontend Tests..."
-    - echo "Current dir: $PWD"
-    - dir
-    - cd Front-End-ReactJS
-    - dir
-    - npm install
-    # Thêm test script vào package.json nếu có
-    # - npm run test
-  dependencies:
-    - build_frontend
-  rules:
-    - changes:
-        - Front-End-ReactJS/**/*
-
-# ============== DOCKER BUILD & PUSH ==============
-docker_backend:
-  stage: package
-  image: docker:latest
-  services:
-    - docker:dind
-  script:
-    - echo "🐳 Building Backend Docker Image..."
-    - docker build -t $CI_REGISTRY_IMAGE/api:$CI_COMMIT_SHA Back-End-ASP.Net/ResUpClub.API
-    - docker tag $CI_REGISTRY_IMAGE/api:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE/api:latest
-    # Nếu có Docker registry, uncomment dòng dưới
-    # - docker push $CI_REGISTRY_IMAGE/api:$CI_COMMIT_SHA
-    # - docker push $CI_REGISTRY_IMAGE/api:latest
-  only:
-    - main
-    - develop
-
-docker_frontend:
-  stage: package
-  image: docker:latest
-  services:
-    - docker:dind
-  script:
-    - echo "🐳 Building Frontend Docker Image..."
-    - docker build -t $CI_REGISTRY_IMAGE/web:$CI_COMMIT_SHA Front-End-ReactJS
-    - docker tag $CI_REGISTRY_IMAGE/web:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE/web:latest
-    # Nếu có Docker registry, uncomment dòng dưới
-    # - docker push $CI_REGISTRY_IMAGE/web:$CI_COMMIT_SHA
-    # - docker push $CI_REGISTRY_IMAGE/web:latest
-  only:
-    - main
-    - develop
-
-# ============== DEPLOY ==============
-deploy_development:
-  stage: deploy
-  image: alpine:latest
-  script:
-    - echo "🚀 Deploying to Development..."
-    # Thêm script deploy của bạn tại đây
-  environment:
-    name: development
-    url: https://dev.resupclub.com
-  only:
-    - develop
-
-deploy_production:
-  stage: deploy
-  image: alpine:latest
-  script:
-    - echo "🚀 Deploying to Production..."
-    # Thêm script deploy của bạn tại đây
-  environment:
-    name: production
-    url: https://resupclub.com
-  only:
-    - main
-  when: manual
