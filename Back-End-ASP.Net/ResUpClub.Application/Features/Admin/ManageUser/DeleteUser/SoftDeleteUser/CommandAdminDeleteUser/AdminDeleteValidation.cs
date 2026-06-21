@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ResUpClub.Application.Features.Admin.ManageUser.Delete.CommandAdminDelete
+namespace ResUpClub.Application.Features.Admin.ManageUser.DeleteUser.SoftDeleteUser.CommandAdminDeleteUser
 {
 	internal class AdminDeleteValidation
 	{

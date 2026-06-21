@@ -16,9 +16,14 @@ namespace ResUpClub.Infrastructure.Services.Notification
 
         public async Task SendNotificationAsync(SendNotificationRequest request)
         {
+            // Resolve user entity by receiver id and set navigation property
+            var user = string.IsNullOrWhiteSpace(request.ReceiverId)
+                ? null
+                : await _unitOfWork.User.GetByIdAsync(request.ReceiverId);
+
             var notification = new NotificationEntity
             {
-                UserId = request.ReceiverId,
+                User = user,
                 Title = request.Title,
                 Message = request.Message,
                 Type = request.Type.ToString(),

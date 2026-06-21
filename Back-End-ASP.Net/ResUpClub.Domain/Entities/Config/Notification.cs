@@ -6,7 +6,7 @@ namespace ResUpClub.Domain.Entities.Config
 {
 	public class Notification : BaseEntity
 	{
-		public string? UserId { get; set; }
+		//public string? UserId { get; set; }
 
 		public string? Title { get; set; }
 

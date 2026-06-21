@@ -10,7 +10,6 @@ namespace ResUpClub.Domain.Entities.AboutClub
 {
 	public class MemberInclub : BaseEntity
 	{
-		public string ProfileId { get; set; } = null!;
 
 		public string ClubId { get; set; } = null!;
 
@@ -24,7 +23,7 @@ namespace ResUpClub.Domain.Entities.AboutClub
 
 		public string? UserId { get; set; }
 
-		public virtual Profile? Profile { get; set; }
+		public virtual ProfileUser? Profile { get; set; }
 
 		public virtual InformationClub? Club { get; set; }
 		public DepartmentOfClubEnum DepartmentOfClub { get; set; }

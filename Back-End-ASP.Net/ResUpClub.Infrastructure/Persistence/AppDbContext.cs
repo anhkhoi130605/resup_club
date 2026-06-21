@@ -35,7 +35,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Role> Roles { get; set; }
-    public virtual DbSet<Profile> Profiles { get; set; }
+    public virtual DbSet<ProfileUser> Profiles { get; set; }
     public virtual DbSet<Notification> Notifications { get; set; }
     public virtual DbSet<Department> Departments { get; set; }
     public virtual DbSet<EventWaitlist> EventWaitlists { get; set; }
