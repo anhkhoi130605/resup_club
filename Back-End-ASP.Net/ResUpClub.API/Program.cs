@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using ResUpClub.Infrastructure.ConfigModel;
 using ResUpClub.Infrastructure.Persistence;
@@ -57,7 +57,12 @@ namespace ResUpClub.API
 			// THỨ TỰ ĐƯỜNG ỐNG MIDDLEWARE PIPELINE
 			// =========================================================================
 
-			// Hứng lỗi toàn cục đầu tiên
+
+
+			// CORS PHẢI CHẠY ĐẦU TIÊN để đảm bảo CORS Header được gán cho cả các Response báo lỗi (Exception)
+			app.UseCors("AllowReactDev");
+
+			// Hứng lỗi toàn cục
 			app.UseMiddleware<ResUpClub.API.Middlewares.GlobalExceptionMiddleware>();
 
 			if (app.Environment.IsDevelopment())
@@ -69,9 +74,6 @@ namespace ResUpClub.API
 					options.DefaultHttpClient = new(ScalarTarget.JavaScript, ScalarClient.Fetch);
 				});
 			}
-
-			// CORS PHẢI CHẠY SỚM (trước UseHttpsRedirection)
-			app.UseCors("AllowReactDev");
 
 			//app.UseHttpsRedirection();
 
