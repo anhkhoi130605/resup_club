@@ -8,7 +8,7 @@ namespace ResUpClub.Domain.Entities.Information
 {
 	public class BlackList : BaseEntity
 	{
-		public string UserId { get; set; } = null!;
+		//public string UserId { get; set; } = null!;
 
 		public User? User { get; set; }
 

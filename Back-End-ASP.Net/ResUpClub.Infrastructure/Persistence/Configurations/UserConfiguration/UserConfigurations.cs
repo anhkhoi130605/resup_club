@@ -22,7 +22,7 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.UserConfiguration
             // Profile one-to-one relationship (Profile owns FK)
 			builder.HasOne(d => d.Profile)
 				.WithOne(p => p.User)
-				.HasForeignKey<Profile>(p => p.UserId)
+				.HasForeignKey<ProfileUser>(p => p.Id)
 				.OnDelete(DeleteBehavior.Cascade);
 			builder.Property(d => d.MemberInOrOutClub)
 				.HasConversion<string>()
@@ -32,7 +32,7 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.UserConfiguration
 			// Notifications
 			builder.HasMany(d => d.Notifications)
 				.WithOne(p => p.User)
-				.HasForeignKey(p => p.UserId)
+				.HasForeignKey(p => p.Id)
 				.OnDelete(DeleteBehavior.Cascade);
 			builder.Property(d=>d.Status)
 				.HasConversion<string>()
@@ -52,11 +52,11 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.UserConfiguration
 		}
 	}
 
-	public class ProfileConfiguration : IEntityTypeConfiguration<Profile>
+	public class ProfileConfiguration : IEntityTypeConfiguration<ProfileUser>
 	{
-		public void Configure(EntityTypeBuilder<Profile> builder)
+		public void Configure(EntityTypeBuilder<ProfileUser> builder)
 		{
-            builder.HasIndex(d => d.UserId).IsUnique();
+            builder.HasIndex(d => d.Id).IsUnique();
 
 			builder.HasOne(d => d.Department)
 				.WithMany()

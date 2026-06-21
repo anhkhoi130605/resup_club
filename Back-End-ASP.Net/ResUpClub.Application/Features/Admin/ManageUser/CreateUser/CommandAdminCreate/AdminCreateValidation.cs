@@ -1,5 +1,5 @@
 ﻿using FluentValidation;// lưu ý cái này
-namespace ResUpClub.Application.Features.Admin.ManageUser.Create.CommandAdminCreate
+namespace ResUpClub.Application.Features.Admin.ManageUser.CreateUser.CommandAdminCreate
 {
 	public class AdminCreateValidation : AbstractValidator<AdminCreateDTO>
 	{

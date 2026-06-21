@@ -17,7 +17,7 @@ namespace ResUpClub.Application.Interfaces.ManageTrancsaction
 		Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
 		Task<IDbContextTransaction> BeginTransactionAsync(IsolationLevel isolationLevel, CancellationToken cancellationToken = default);
         IUserRepository User { get; }
-		IGenericRepository<Profile> Profile { get; }
+		IGenericRepository<ProfileUser> Profile { get; }
 		IGenericRepository<Role> Roles { get; }
 		IGenericRepository<Notification> Notifications { get; }
 		IGenericRepository<Department> Departments { get; }
