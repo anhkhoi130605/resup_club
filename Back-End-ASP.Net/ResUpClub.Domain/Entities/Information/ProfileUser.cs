@@ -1,34 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Text;
+﻿using System.Collections.Generic;
+using ResUpClub.Domain.Entities.AboutUser;
 using ResUpClub.Domain.Entities.Config;
 using ResUpClub.Domain.Entities.EventIformation;
 using ResUpClub.Domain.Entities.FeedBack;
 using ResUpClub.Domain.Entities.RoomIformation;
-using ResUpClub.Domain.Entities.AboutUser;
+// Nhớ using các namespace chứa các Entity liên quan (User, Department, EventWaitlist...)
+
 namespace ResUpClub.Domain.Entities.Information
 {
-    //Profile of User
 	public class ProfileUser : BaseEntity
 	{
-
-		//public string UserId { get; set; } = null!;
+		// Khóa ngoại (nếu có liên kết với bảng User, bạn nên có cột UserId ở đây)
+		// public string UserId { get; set; } = null!;
 
 		public string? DepartmentId { get; set; }
 
 		public string? CurrentSemester { get; set; }
+
 		public string? Address { get; set; }
+
 		public string? StudentCode { get; set; }
+
 		public string? EmergencyContactName { get; set; }
 
 		public string? EmergencyContactPhone { get; set; }
 
-		//public DateTime? CreatedAt { get; set; }
-
-		//public DateTime? UpdatedAt { get; set; }
+		// ==========================================
+		// QUAN HỆ 1-1 HOẶC N-1 (NAVIGATION PROPERTIES)
+		// ==========================================
 
 		public virtual Department? Department { get; set; }
+
+		public virtual User? User { get; set; }
+
+		// ==========================================
+		// QUAN HỆ 1-N (COLLECTIONS) - Đã tối ưu bằng HashSet
+		// ==========================================
 
 		public virtual ICollection<EventWaitlist> EventWaitlists { get; set; } = new HashSet<EventWaitlist>();
 
@@ -41,7 +48,5 @@ namespace ResUpClub.Domain.Entities.Information
 		public virtual ICollection<EventAgenda> AgendasAsStudentSpeaker { get; set; } = new HashSet<EventAgenda>();
 
 		public virtual ICollection<Ticket> Tickets { get; set; } = new HashSet<Ticket>();
-
-		public virtual User? User { get; set; }
 	}
 }
