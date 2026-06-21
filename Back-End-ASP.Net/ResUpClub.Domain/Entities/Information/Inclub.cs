@@ -9,7 +9,7 @@ namespace ResUpClub.Domain.Entities.Information
 {
 	public class Inclub : BaseEntity
 	{
-		public string ProfileUserId { get; set; } = null!;
+
 		public virtual ProfileUser? ProfileUser { get; set; } = null!;
 
 		//public string ClubId { get; set; } = null!;
