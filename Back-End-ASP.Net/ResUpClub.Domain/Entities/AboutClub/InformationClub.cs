@@ -31,6 +31,6 @@ namespace ResUpClub.Domain.Entities.AboutClub
 
 		public string? LeaderId { get; set; }
 
-		public virtual ICollection<ProfileClub> Members { get; set; } = new List<ProfileClub>();
+		public virtual ICollection<ProfileClub> Members { get; set; } = new HashSet<ProfileClub>();
 	}
 }

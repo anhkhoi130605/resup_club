@@ -26,6 +26,7 @@ public partial class User : BaseEntity
 	public UserStatusEnum? Status { get; set; }
 
 	public bool? IsBanned { get; set; }
+	public string? Bio{ get; set; }
 
 	public DateTime? ReactivateAt { get; set; }
 
@@ -37,9 +38,20 @@ public partial class User : BaseEntity
 
 	//public DateTime? DeletedAt { get; set; }
 
-	public virtual Profile? Profile { get; set; }
+	public virtual ProfileUser? Profile { get; set; }
 
-	public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+	// Backwards-compatible navigation name expected by existing EF migrations/snapshots.
+	// Some migrations/configurations reference `StudentProfile` as the inverse navigation
+	// for `Profile` entity. Keep `Profile` as the primary property but expose
+	// `StudentProfile` as an alias so EF won't create a shadow navigation and cause
+	// duplicate navigation errors at design time.
+	public virtual ProfileUser? StudentProfile
+	{
+		get => Profile;
+		set => Profile = value;
+	}
+
+	public virtual ICollection<Notification> Notifications { get; set; } = new HashSet<Notification>();
 
     public virtual Role Role { get; set; } = null!;
 	// Store full student id like DE123456 as string
@@ -48,4 +60,5 @@ public partial class User : BaseEntity
 	public Gender? Gender { get; set; }
 
 	public MemberInOrOutClubEnum MemberInOrOutClub { get; set; }
+	public DateTime? DateOfBirth { get; set; }
 }

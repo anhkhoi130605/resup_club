@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
@@ -57,11 +57,11 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.ClubConfiguration
 	{
 		public void Configure(EntityTypeBuilder<Inclub> builder)
 		{
-		    
-			// ProfileId is required and Foreign Key
-			builder.Property(d => d.ProfileId)
-				.IsRequired()
-				.HasMaxLength(255);
+			// ProfileId is represented by the shared primary key Id, pointing to ProfileUser
+			builder.HasOne(d => d.ProfileUser)
+				.WithOne()
+				.HasForeignKey<Inclub>(d => d.Id)
+				.OnDelete(DeleteBehavior.Cascade);
 
 			// ClubId is required and Foreign Key
 			builder.Property(d => d.ClubId)
@@ -98,21 +98,8 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.ClubConfiguration
 				.HasConversion<string>()
 				.HasDefaultValue(IsBlackListEnum.WhiteList);
 
-			// Foreign Key relationship with Profile
-			builder.HasOne(d => d.Profile)
-				.WithMany()
-				.HasForeignKey(d => d.ProfileId)
-				.OnDelete(DeleteBehavior.Cascade);
-
-
-			// Optional link to User
-			builder.HasOne(d => d.User)
-				.WithMany()
-				.HasForeignKey(d => d.UserId)
-				.OnDelete(DeleteBehavior.SetNull);
-
-			// Create index for ProfileId and ClubId
-			builder.HasIndex(d => new { d.ProfileId, d.ClubId })
+			// Create index for ProfileId and ClubId (represented by Id and ClubId)
+			builder.HasIndex(d => new { d.Id, d.ClubId })
 				.IsUnique();
 		}
 	}
@@ -121,8 +108,8 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.ClubConfiguration
 	{
 		public void Configure(EntityTypeBuilder<ResUpClub.Domain.Entities.AboutClub.MemberInclub> builder)
 		{
-			// ProfileId and ClubId
-			builder.Property(d => d.ProfileId)
+			// ProfileId (shadow property) and ClubId
+			builder.Property<string>("ProfileId")
 				.IsRequired()
 				.HasMaxLength(255);
 
@@ -161,7 +148,7 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.ClubConfiguration
 			// FKs to Profile and User
 			builder.HasOne(d => d.Profile)
 				.WithMany()
-				.HasForeignKey(d => d.ProfileId)
+				.HasForeignKey("ProfileId")
 				.OnDelete(DeleteBehavior.Cascade);
 
 			builder.HasOne(d => d.User)
@@ -170,7 +157,7 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.ClubConfiguration
 				.OnDelete(DeleteBehavior.SetNull);
 
 			// Unique per profile+club
-			builder.HasIndex(d => new { d.ProfileId, d.ClubId }).IsUnique();
+			builder.HasIndex("ProfileId", "ClubId").IsUnique();
 			builder.Property(d => d.DepartmentOfClub)
 				.HasConversion<string>();
 		}
@@ -180,11 +167,6 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.ClubConfiguration
 	{
 		public void Configure(EntityTypeBuilder<OutClub> builder)
 		{
-			// ProfileId is required and Foreign Key
-			builder.Property(d => d.ProfileId)
-				.IsRequired()
-				.HasMaxLength(255);
-
 			// ClubId is required and Foreign Key
 			builder.Property(d => d.ClubId)
 				.IsRequired()
@@ -219,14 +201,14 @@ namespace ResUpClub.Infrastructure.Persistence.Configurations.ClubConfiguration
 				.HasConversion<string>()
 				.HasDefaultValue(IsBlackListEnum.WhiteList);
 
-			// Foreign Key relationship with Profile
+			// Foreign Key relationship with Profile (represented by the shared primary key Id)
 			builder.HasOne(d => d.Profile)
-				.WithMany()
-				.HasForeignKey(d => d.ProfileId)
+				.WithOne()
+				.HasForeignKey<OutClub>(d => d.Id)
 				.OnDelete(DeleteBehavior.Cascade);
 
-			// Create index for ProfileId and ClubId
-			builder.HasIndex(d => new { d.ProfileId, d.ClubId })
+			// Create index for ProfileId and ClubId (represented by Id and ClubId)
+			builder.HasIndex(d => new { d.Id, d.ClubId })
 				.IsUnique();
 		}
 	}

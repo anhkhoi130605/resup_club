@@ -4,7 +4,7 @@ import { Routes, Route, Link } from 'react-router-dom'
 import Login from './Authentication/login/login'
 import LoginSuccess from './Authentication/login/LoginSuccess'
 import Register from './Authentication/Register/register'
-import Dashboard from './shared/DashBoardForRole/DashboardForAdmin'
+import DashboardRouter from './shared/DashBoardForRole/DashboardRouter'
 import ProtectedRoute from './shared/components/ProtectedRoute'
 import './shared/styles/theme.css'
 import './App.css'
@@ -47,7 +47,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
+        <Route path="/dashboard" element={<ProtectedRoute element={<DashboardRouter />} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login-success" element={<LoginSuccess />} />

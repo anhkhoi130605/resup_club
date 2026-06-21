@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using ResUpClub.Domain.Entities.Config;
@@ -9,7 +9,7 @@ namespace ResUpClub.Domain.Entities.Information
 {
 	public class OutClub : BaseEntity
 	{
-		public string ProfileId { get; set; } = null!;
+		public ProfileUser? Profile { get; set; } = null!;
 
 		public string ClubId { get; set; } = null!;
 
@@ -29,10 +29,8 @@ namespace ResUpClub.Domain.Entities.Information
 
 		public IsBlackListEnum IsBlackList { get; set; }
 
-		public virtual Profile? Profile { get; set; }
-
 		// Link to User (optional)
-		public string? UserId { get; set; }
+//		public string? UserId { get; set; }
 
 		public virtual User? User { get; set; }
 	}
