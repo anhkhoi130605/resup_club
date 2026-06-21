@@ -19,7 +19,7 @@ namespace ResUpClub.Infrastructure.Repository
 		private readonly AppDbContext _ctx;
 
 		public IUserRepository User { get; }
-		public IGenericRepository<Profile> Profile { get; }
+		public IGenericRepository<ProfileUser> Profile { get; }
 		public IGenericRepository<Role> Roles { get; }
 		public IGenericRepository<Notification> Notifications { get; }
 		public IGenericRepository<Department> Departments { get; }
@@ -36,7 +36,7 @@ namespace ResUpClub.Infrastructure.Repository
 			User = userRepository ?? (IUserRepository)new UserRepository(_ctx);
 
 			// Initialize generic repositories
-			Profile = new GenericRepository<Profile>(_ctx);
+			Profile = new GenericRepository<ProfileUser>(_ctx);
 			Roles = new GenericRepository<Role>(_ctx);
 			Notifications = new GenericRepository<Notification>(_ctx);
 			Departments = new GenericRepository<Department>(_ctx);
