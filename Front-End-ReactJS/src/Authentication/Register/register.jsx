@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './register.css';
+import { saveAccessToken } from '../../shared/utils/auth';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5191';
 
@@ -42,7 +43,22 @@ export default function Register() {
         return;
       }
 
-      await res.json();
+      const data = await res.json();
+      
+      // Tự động đăng nhập người dùng sau khi đăng ký
+      if (data.accessToken) {
+        saveAccessToken(data.accessToken);
+      }
+      if (data.user) {
+        localStorage.setItem('user', JSON.stringify({
+          email: data.user.email || data.user.Email,
+          fullName: data.user.fullName || data.user.FullName,
+          role: 'User',
+          memberInOrOutClub: 'OutClub',
+          roleOutClub: 'Student'
+        }));
+      }
+
       navigate('/dashboard');
     } catch (error) {
       alert('Không thể kết nối đến máy chủ. Vui lòng thử lại sau.');
