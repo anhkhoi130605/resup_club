@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 
 // Import các Dashboard của Admin
 import DashboardForAdmin from './InClub/AdminDashBoard/DashboardForAdmin';
+import UserManagement from './InClub/AdminDashBoard/UserManagement';
+import RecruitmentManagement from './InClub/AdminDashBoard/Recruitment/RecruitmentManagement';
+import MemberManagement from './InClub/AdminDashBoard/Members/MemberManagement';
+import EventManagement from './InClub/AdminDashBoard/Events/EventManagement';
+import FinancialManagement from './InClub/AdminDashBoard/Finance/FinancialManagement';
+import SpeakerManagement from './InClub/AdminDashBoard/Speakers/SpeakerManagement';
+import SponsorManagement from './InClub/AdminDashBoard/Sponsors/SponsorManagement';
 
 // Import các Dashboard của OutClub
 import DashBoardForStudent from './OutClub/Student/DashBoardForStudent';
@@ -15,7 +22,9 @@ import MemberDashBoardForMedia from './InClub/UserInClub/MemberDashBoard/Media/D
 // Import các Dashboard của InClub (Leader)
 import LeaderDashBoardForBiz from './InClub/UserInClub/LeaderDashBoard/Biz/DashBoardForBiz';
 import LeaderDashBoardForHR from './InClub/UserInClub/LeaderDashBoard/Human_Resource/DashBoardForHR';
+// Import các Dashboard của InClub (Leader)
 import LeaderDashBoardForMedia from './InClub/UserInClub/LeaderDashBoard/Media/DashBoardForMedia';
+import Sidebar from '../components/Sidebar/Sidebar';
 
 export default function DashboardRouter() {
   const [user, setUser] = useState(null);
@@ -24,6 +33,7 @@ export default function DashboardRouter() {
   const [selectedClubStatus, setSelectedClubStatus] = useState(''); // InClub, OutClub
   const [selectedInClubRole, setSelectedInClubRole] = useState(''); // Leader, Member
   const [selectedOutClubRole, setSelectedOutClubRole] = useState(''); // Student, Sponsor
+  const [activeItem, setActiveItem] = useState('overview');
 
   // Đọc user từ localStorage khi mount
   useEffect(() => {
@@ -35,10 +45,10 @@ export default function DashboardRouter() {
 
         // Khởi tạo các trạng thái từ user thật trong DB
         setSelectedRole(savedUser.role || savedUser.Role || 'User');
-        
+
         const clubStatus = savedUser.memberInOrOutClub === 'InClub' || savedUser.memberInOrOutClub === 0 ? 'InClub' : 'OutClub';
         setSelectedClubStatus(clubStatus);
-        
+
         setSelectedDept(savedUser.department || 'Biz');
         setSelectedInClubRole(savedUser.roleInClub || 'Member');
         setSelectedOutClubRole(savedUser.roleOutClub || 'Student');
@@ -57,7 +67,24 @@ export default function DashboardRouter() {
   const renderDashboard = () => {
     // 1. Nếu là Admin
     if (selectedRole === 'Admin') {
-      return <DashboardForAdmin />;
+      switch (activeItem) {
+        case 'users':
+          return <UserManagement />;
+        case 'recruitment':
+          return <RecruitmentManagement />;
+        case 'members':
+          return <MemberManagement />;
+        case 'events':
+          return <EventManagement />;
+        case 'finance':
+          return <FinancialManagement />;
+        case 'speakers':
+          return <SpeakerManagement />;
+        case 'sponsors':
+          return <SponsorManagement />;
+        default:
+          return <DashboardForAdmin />;
+      }
     }
 
     // 2. Nếu là User
@@ -98,121 +125,32 @@ export default function DashboardRouter() {
   };
 
   return (
-    <div style={{ position: 'relative', minHeight: '100vh', paddingTop: '70px' }}>
-      
-      {/* Dev Tool: Thanh chuyển đổi nhanh các Role Dashboard để Test */}
-      <div style={{
-        background: 'rgba(255, 255, 255, 0.9)',
-        backdropFilter: 'blur(10px)',
-        borderBottom: '2px solid #ff7a00',
-        padding: '12px 24px',
-        position: 'sticky',
-        top: 0,
-        zIndex: 999,
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        gap: '15px',
-        fontFamily: 'Inter, sans-serif'
-      }}>
-        <div style={{ fontWeight: 'bold', color: '#ff7a00', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span>🛠️ DEV TEST ROLE:</span>
+    <div style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* Main Layout Area side-by-side: Sidebar & Content Panel */}
+      <div style={{ display: 'flex', flex: 1, position: 'relative' }}>
+        
+        {/* SIDEBAR NAVIGATION */}
+        <Sidebar
+          role={selectedRole}
+          setRole={setSelectedRole}
+          clubStatus={selectedClubStatus}
+          setClubStatus={setSelectedClubStatus}
+          inClubRole={selectedInClubRole}
+          setInClubRole={setSelectedInClubRole}
+          outClubRole={selectedOutClubRole}
+          setOutClubRole={setSelectedOutClubRole}
+          dept={selectedDept}
+          setDept={setSelectedDept}
+          user={user}
+          activeItem={activeItem}
+          setActiveItem={setActiveItem}
+        />
+
+        {/* DYNAMIC DASHBOARD PAGE */}
+        <div style={{ flex: 1, minWidth: 0, animation: 'fadeIn 0.5s ease' }}>
+          {renderDashboard()}
         </div>
 
-        {/* Cấp 1: Chọn Role Hệ Thống */}
-        <select 
-          value={selectedRole} 
-          onChange={(e) => setSelectedRole(e.target.value)}
-          style={selectStyle}
-        >
-          <option value="User">Hệ thống: User</option>
-          <option value="Admin">Hệ thống: Admin</option>
-        </select>
-
-        {selectedRole === 'User' && (
-          <>
-            {/* Cấp 2: Chọn InClub / OutClub */}
-            <select 
-              value={selectedClubStatus} 
-              onChange={(e) => setSelectedClubStatus(e.target.value)}
-              style={selectStyle}
-            >
-              <option value="OutClub">Trạng thái: Ngoài CLB (OutClub)</option>
-              <option value="InClub">Trạng thái: Trong CLB (InClub)</option>
-            </select>
-
-            {/* Cấp 3: Nếu là InClub, chọn Bộ phận & Chức vụ nội bộ */}
-            {selectedClubStatus === 'InClub' && (
-              <>
-                <select 
-                  value={selectedInClubRole} 
-                  onChange={(e) => setSelectedInClubRole(e.target.value)}
-                  style={selectStyle}
-                >
-                  <option value="Member">Chức vụ: Thành viên (Member)</option>
-                  <option value="Leader">Chức vụ: Trưởng ban (Leader)</option>
-                </select>
-
-                <select 
-                  value={selectedDept} 
-                  onChange={(e) => setSelectedDept(e.target.value)}
-                  style={selectStyle}
-                >
-                  <option value="Biz">Ban: Kinh doanh (Biz)</option>
-                  <option value="Human_Resource">Ban: Nhân sự (HR)</option>
-                  <option value="Media">Ban: Truyền thông (Media)</option>
-                </select>
-              </>
-            )}
-
-            {/* Cấp 3: Nếu là OutClub, chọn Học sinh hay Nhà tài trợ */}
-            {selectedClubStatus === 'OutClub' && (
-              <select 
-                value={selectedOutClubRole} 
-                onChange={(e) => setSelectedOutClubRole(e.target.value)}
-                style={selectStyle}
-              >
-                <option value="Student">Đối tượng: Sinh viên (Student)</option>
-                <option value="Sponsor">Đối tượng: Nhà tài trợ (Sponsor)</option>
-              </select>
-            )}
-          </>
-        )}
-
-        <div style={{ 
-          fontSize: '13px', 
-          color: '#555', 
-          marginLeft: 'auto', 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'flex-end',
-          gap: '4px'
-        }}>
-          {user && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#333' }}>
-              <span style={{
-                width: '8px',
-                height: '8px',
-                borderRadius: '50%',
-                backgroundColor: '#34A853',
-                display: 'inline-block'
-              }}></span>
-              <span><strong>{user.email || user.Email}</strong></span>
-            </div>
-          )}
-          <div style={{ fontSize: '11px', color: '#888' }}>
-            Đang xem dưới quyền: <strong>{selectedRole}</strong>
-            {selectedRole === 'User' && ` > ${selectedClubStatus}`}
-            {selectedRole === 'User' && selectedClubStatus === 'InClub' && ` > ${selectedInClubRole} (${selectedDept})`}
-            {selectedRole === 'User' && selectedClubStatus === 'OutClub' && ` > ${selectedOutClubRole}`}
-          </div>
-        </div>
-      </div>
-
-      {/* Render Dashboard tương ứng */}
-      <div style={{ animation: 'fadeIn 0.5s ease' }}>
-        {renderDashboard()}
       </div>
     </div>
   );

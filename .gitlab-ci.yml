@@ -63,3 +63,13 @@ build_frontend:
   rules:
     - changes:
         - Front-End-ReactJS/**/*
+notify-github-success:
+  stage: .post # Thay bằng stage cuối cùng trong pipeline của bạn
+  script:
+    - >
+      curl -X POST 
+      -H "Authorization: token $GITHUB_TOKEN" 
+      -H "Accept: application/vnd.github.v3+json" 
+      "https://api.github.com/repos/anhkhoi130605/resup_club/statuses/$CI_COMMIT_SHA" 
+      -d '{"state":"success", "context":"GitLab CI", "description":"Pipeline passed!"}'
+  when: on_success # Chỉ chạy khi các bước trên đã thành công
